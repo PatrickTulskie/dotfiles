@@ -1,0 +1,36 @@
+# Patrick's dotfiles
+
+These are my dotfiles.  There are many like them, but these are mine.
+
+They are all (currently) for ZSH.  I use oh-my-zsh (https://github.com/robbyrussell/oh-my-zsh) and you should too.
+
+As I get around to cleaning up the rest of my scripts and dotfiles I'll add them in here.  I just needed a clean repo so I can slurp down my dotfiles when I'm building new servers.
+
+## Installation and Useage
+
+I put this stuff in ~/dotfiles and then I source all of them in my .zshrc file with the following:
+
+    for dotfile in ~/dotfiles/.zsh_*; do
+      source ${dotfile}
+    done
+
+Your exact setup may vary.
+
+## What's In Here?
+
+    ├── .zsh_alias   # My basic aliases for development.
+    ├── .zsh_base    # My base dotfile that is mainly just for loading my private dotfiles.
+    ├── .zsh_export  # My export functions.  Sets up basic environment things like my editor (TextMate) and MySQL path.
+    ├── .zsh_osx     # Sets up my OS X specific aliases.
+    ├── .zsh_rubygc  # Sets up REE's GC settings so that tests are fast.
+    ├── README.mdown # The file you're currently reading.
+    └── private      # Private directory in the .gitignore for things you don't want to share and/or put in version control.
+        └── .zsh_your_private_stuff
+
+## Notes
+
+Use these at your own risk.  Make sure you look through them before you just toss them into your system.  They work for me, but they might make your computer explode and/or have babies.  I'm not responsible for explosions or babies.
+
+## Contributions
+
+I love contributions.  Just fork, make your changes, and submit a pull request.

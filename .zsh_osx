@@ -1,0 +1,19 @@
+if [[ `uname` = "Darwin" ]]; then
+  export EDITOR="mate -w"
+  
+  # Mac Directory Services
+  alias ldns="dscl localhost -list /Local/Default/Hosts"
+  ldns_set() { sudo dscl localhost -create /Local/Default/Hosts/$1 IPAddress 127.0.0.1 }
+  ldns_delete() { sudo dscl localhost -delete /Local/Default/Hosts/$1 }
+
+  # Mac Finder Magic
+  alias rootfinder='sudo /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder'
+
+  # Mac Firefox Stuff
+  alias optff="cd ~/Library/Application\ Support/Firefox/Profiles/; for f in */*.sqlite; do sqlite3 \$f 'VACUUM;'; done; echo Firefox DBs Optimized;"
+  alias ffpm="/Applications/Firefox.app/Contents/MacOS/firefox-bin -ProfileManager"
+
+  # Mac Apache Control
+  alias a2restart='sudo /usr/sbin/apachectl restart'
+  alias a2conf='mate /etc/apache2/httpd.conf'
+fi

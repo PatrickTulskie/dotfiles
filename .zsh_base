@@ -1,0 +1,4 @@
+# Require any private .zsh files
+for dotfile in ~/dotfiles/private/.zsh_*; do
+  source ${dotfile}
+done

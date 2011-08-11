@@ -1,0 +1,35 @@
+# Random Stuff
+alias autotest='autotest -q'
+
+# Nginx
+nginx_reload() { sudo kill -HUP `cat /usr/local/var/run/nginx.pid` }
+nginx_stop() { sudo kill `cat /usr/local/var/run/nginx.pid` }
+alias nginx_start="sudo nginx"
+
+# Unicorn
+unicorn_start() { unicorn -D -c `pwd`/config/unicorn_dev.rb }
+unicorn_stop() {
+  pid_file=`pwd`/tmp/pids/unicorn.pid
+  unicorn_pid=`cat $pid_file`
+  kill $unicorn_pid
+}
+unicorn_reload() {
+  pid_file=`pwd`/tmp/pids/unicorn.pid
+  unicorn_pid=`cat $pid_file`
+  kill -USR2 $unicorn_pid
+}
+
+# Rails and Background Tasks
+alias dl="tail -f log/development.log"
+alias sc="./script/console"
+alias redisd="dtach -n /tmp/redis.dtach redis-server /etc/redis.conf"
+alias rworker="redisd; resque-pool -c config/resque-pool.yml -E development_workers"
+
+# Git Shortcuts
+alias gitc='git commit -a -v'
+alias gitp='git push'
+alias gitb='git branch'
+alias gitd='git diff | mate'
+alias gits='git status'
+alias gita='git add *'
+alias gitco='git checkout'
