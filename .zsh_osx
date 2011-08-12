@@ -3,8 +3,12 @@ if [[ `uname` = "Darwin" ]]; then
   
   # Mac Directory Services
   alias ldns="dscl localhost -list /Local/Default/Hosts"
-  ldns_set() { sudo dscl localhost -create /Local/Default/Hosts/$1 IPAddress 127.0.0.1 }
-  ldns_delete() { sudo dscl localhost -delete /Local/Default/Hosts/$1 }
+  ldns_set() { 
+    sudo dscl localhost -create /Local/Default/Hosts/$1 IPAddress 127.0.0.1
+  }
+  ldns_delete() {
+    sudo dscl localhost -delete /Local/Default/Hosts/$1
+  }
 
   # Mac Finder Magic
   alias rootfinder='sudo /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder'
@@ -16,4 +20,10 @@ if [[ `uname` = "Darwin" ]]; then
   # Mac Apache Control
   alias a2restart='sudo /usr/sbin/apachectl restart'
   alias a2conf='mate /etc/apache2/httpd.conf'
+  
+  # Eject Verizon Access Manager Shit
+  vzae() {
+    hdiutil eject `df | grep VZAccess | cut -f1 -d " "`
+  }
+  
 fi
