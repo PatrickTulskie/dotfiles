@@ -1,0 +1,25 @@
+# For those times when I need a Bash terminal session, somewhere...
+
+##
+# DELUXE-USR-LOCAL-BIN-INSERT
+# (do not remove this comment)
+##
+echo $PATH | grep -q -s "/usr/local/bin"
+if [ $? -eq 1 ] ; then
+    PATH=/usr/local/bin:$PATH
+    export PATH
+fi
+
+echo $PATH | grep -q -s "/usr/local/sbin"
+if [ $? -eq 1 ] ; then
+    PATH=/usr/local/sbin:$PATH
+    export PATH
+fi
+
+# Require any universal dotfiles
+for dotfile in ~/dotfiles/.universal_*; do
+  source ${dotfile}
+done
+
+# Load RVM
+if [ -s ~/.rvm/scripts/rvm ] ; then source ~/.rvm/scripts/rvm ; fi

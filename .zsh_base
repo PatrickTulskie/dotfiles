@@ -2,3 +2,8 @@
 for dotfile in ~/dotfiles/private/.zsh_*; do
   source ${dotfile}
 done
+
+# Require any universal dotfiles
+for dotfile in ~/dotfiles/.universal_*; do
+  source ${dotfile}
+done
