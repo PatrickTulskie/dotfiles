@@ -1,5 +1,6 @@
 if [[ `uname` = "Darwin" ]]; then
   export EDITOR="mate -w"
+  export PATH="$PATH:/Users/`whoami`/dotfiles/osx_scripts"
   
   # Mac Directory Services
   alias ldns="dscl localhost -list /Local/Default/Hosts"
