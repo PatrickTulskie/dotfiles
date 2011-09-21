@@ -1,19 +1,25 @@
-# Random Stuff
+# Random Ruby Stuff
 alias autotest='autotest -q'
 
 # Nginx
-nginx_reload() { sudo kill -HUP `cat /usr/local/var/run/nginx.pid` }
-nginx_stop() { sudo kill `cat /usr/local/var/run/nginx.pid` }
+function nginx_reload() { 
+  sudo kill -HUP `cat /usr/local/var/run/nginx.pid`
+}
+function nginx_stop() {
+  sudo kill `cat /usr/local/var/run/nginx.pid`
+}
 alias nginx_start="sudo nginx"
 
 # Unicorn
-unicorn_start() { unicorn -D -c `pwd`/config/unicorn_dev.rb }
-unicorn_stop() {
+function unicorn_start() {
+  unicorn -D -c `pwd`/config/unicorn_dev.rb
+}
+function unicorn_stop() {
   pid_file=`pwd`/tmp/pids/unicorn.pid
   unicorn_pid=`cat $pid_file`
   kill $unicorn_pid
 }
-unicorn_reload() {
+function unicorn_reload() {
   pid_file=`pwd`/tmp/pids/unicorn.pid
   unicorn_pid=`cat $pid_file`
   kill -USR2 $unicorn_pid
@@ -33,3 +39,8 @@ alias gitd='git diff | mate'
 alias gits='git status'
 alias gita='git add *'
 alias gitco='git checkout'
+
+# Network Monitoring
+function watch_requests() {
+  sudo ngrep -q -W byline "^(GET|POST|PUT) .*"
+}
