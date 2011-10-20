@@ -44,3 +44,6 @@ alias gitco='git checkout'
 function watch_requests() {
   sudo ngrep -q -W byline "^(GET|POST|PUT) .*"
 }
+
+# Misc Networking
+alias hazip="curl http://icanhazip.com"
