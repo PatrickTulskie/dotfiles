@@ -1,5 +1,6 @@
 # Random Ruby Stuff
 alias autotest='autotest -q'
+alias asq='autospec --quiet'
 
 # Nginx
 function nginx_reload() { 
