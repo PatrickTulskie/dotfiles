@@ -1,0 +1,26 @@
+#!/bin/sh
+
+echo "Installing oh-my-zsh"
+curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
+
+if [ -f ~/.zshrc ]; then
+  mv ~/.zshrc ~/.zshrc.bak
+fi
+
+cp ~/dotfiles/resources/.zshrc ~/.zshrc
+echo "Dropped in .zshrc file"
+
+if [ -f ~/.profile ]; then
+  mv ~/.profile ~/.profile.bak
+fi
+
+cp ~/dotfiles/resources/.profile ~/.profile
+echo "Dropped in .profile file"
+
+cp ~/dotfiles/resources/jived*.zsh-theme ~/.oh-my-zsh/
+echo "Installed jived oh-my-zsh themes"
+
+if [[ `uname` = "Darwin" ]]; then
+  echo "Installing Jived terminal theme"
+  open ~/dotfiles/resources/Jived.terminal
+fi
