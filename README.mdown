@@ -13,6 +13,8 @@ I put this stuff in ~/dotfiles and then I source all of them in my .zshrc file w
     for dotfile in ~/dotfiles/.zsh_*; do
       source ${dotfile}
     done
+    
+If you want to simplify things a bit, you can run script/install, but it makes a bunch of assumptions and it may not be best for your particular system.
 
 Your exact setup may vary.
 
@@ -30,6 +32,8 @@ Your exact setup may vary.
 ## Notes
 
 Use these at your own risk.  Make sure you look through them before you just toss them into your system.  They work for me, but they might make your computer explode and/or have babies.  I'm not responsible for explosions or babies.
+
+I use RVM locally and in production and several of my dotfiles assume RVM is installed.  You may want to customize for your own needs.
 
 ## Contributions
 

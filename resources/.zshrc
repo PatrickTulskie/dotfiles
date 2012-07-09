@@ -31,5 +31,7 @@ for dotfile in ~/dotfiles/.zsh_*; do
 done
 
 # RVM
-if [ -s ~/.rvm/scripts/rvm ] ; then source ~/.rvm/scripts/rvm ; fi
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+if [ -s ~/.rvm/scripts/rvm ]; then
+  source ~/.rvm/scripts/rvm
+  PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+fi
