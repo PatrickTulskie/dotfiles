@@ -1,6 +1,7 @@
 if [[ `uname` = "Darwin" ]]; then
   export EDITOR="mate -w"
   export PATH="$PATH:/Users/`whoami`/dotfiles/osx_scripts"
+  # export RUBYOPT="-ropenssl" # Attempt resolve most problems with OpenSSL and Ruby.
   
   # Mac Directory Services
   alias ldns="dscl localhost -list /Local/Default/Hosts"
@@ -21,6 +22,9 @@ if [[ `uname` = "Darwin" ]]; then
   # Mac Apache Control
   alias a2restart='sudo /usr/sbin/apachectl restart'
   alias a2conf='mate /etc/apache2/httpd.conf'
+  
+  # Cleanup the Open With Menu
+  alias cleanow="/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user; killall Finder"
   
   # Eject Verizon Access Manager Shit
   vzae() {

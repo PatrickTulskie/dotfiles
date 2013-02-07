@@ -1,6 +1,7 @@
 # Random Ruby Stuff
 alias autotest='autotest -q'
 alias asq='autospec --quiet'
+alias shipit='cap production deploy'
 
 # Nginx
 function nginx_reload() { 
@@ -47,4 +48,4 @@ function watch_requests() {
 }
 
 # Misc Networking
-alias hazip="curl http://icanhazip.com"
+alias hazip="curl --ipv4 http://icanhazip.com"
