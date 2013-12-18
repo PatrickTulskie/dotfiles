@@ -1,6 +1,4 @@
 # Random Ruby Stuff
-alias autotest='autotest -q'
-alias asq='autospec --quiet'
 alias shipit='cap production deploy'
 
 # Nginx
