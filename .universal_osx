@@ -26,9 +26,6 @@ if [[ `uname` = "Darwin" ]]; then
   # Cleanup the Open With Menu
   alias cleanow="/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user; killall Finder"
   
-  # Eject Verizon Access Manager Shit
-  vzae() {
-    hdiutil eject `df | grep VZAccess | cut -f1 -d " "`
-  }
+  alias truecrypt="/Applications/TrueCrypt.app/Contents/MacOS/TrueCrypt --text"
   
 fi
