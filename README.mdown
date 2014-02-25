@@ -10,7 +10,7 @@ As I get around to cleaning up the rest of my scripts and dotfiles I'll add them
 
 I put this stuff in ~/dotfiles and then I source all of them in my .zshrc file with the following:
 
-    for dotfile in ~/dotfiles/.zsh_*; do
+    for dotfile in ~/dotfiles/_zsh_*; do
       source ${dotfile}
     done
     
@@ -20,14 +20,14 @@ Your exact setup may vary.
 
 ## What's In Here?
 
-    ├── .zsh_alias   # My basic aliases for development.
-    ├── .zsh_base    # My base dotfile that is mainly just for loading my private dotfiles.
-    ├── .zsh_export  # My export functions.  Sets up basic environment things like my editor (TextMate) and MySQL path.
-    ├── .zsh_osx     # Sets up my OS X specific aliases.
-    ├── .zsh_rubygc  # Sets up REE's GC settings so that tests are fast.
+    ├── _zsh_alias   # My basic aliases for development.
+    ├── _zsh_base    # My base dotfile that is mainly just for loading my private dotfiles.
+    ├── _zsh_export  # My export functions.  Sets up basic environment things like my editor (TextMate) and MySQL path.
+    ├── _zsh_osx     # Sets up my OS X specific aliases.
+    ├── _zsh_rubygc  # Sets up REE's GC settings so that tests are fast.
     ├── README.mdown # The file you're currently reading.
     └── private      # Private directory in the .gitignore for things you don't want to share and/or put in version control.
-        └── .zsh_your_private_stuff
+        └── _zsh_your_private_stuff
 
 ## Notes
 

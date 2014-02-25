@@ -26,7 +26,7 @@ source $ZSH/oh-my-zsh.sh
 source ~/.profile
 
 # Aliases
-for dotfile in ~/dotfiles/.zsh_*; do
+for dotfile in ~/dotfiles/_zsh_*; do
   source ${dotfile}
 done
 

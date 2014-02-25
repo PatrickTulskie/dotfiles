@@ -7,14 +7,14 @@ if [ -f ~/.zshrc ]; then
   mv ~/.zshrc ~/.zshrc.bak
 fi
 
-cp ~/dotfiles/resources/.zshrc ~/.zshrc
+cp ~/dotfiles/resources/_zshrc ~/.zshrc
 echo "Dropped in .zshrc file"
 
 if [ -f ~/.profile ]; then
   mv ~/.profile ~/.profile.bak
 fi
 
-cp ~/dotfiles/resources/.profile ~/.profile
+cp ~/dotfiles/resources/_profile ~/.profile
 echo "Dropped in .profile file"
 
 cp ~/dotfiles/resources/jived*.zsh-theme ~/.oh-my-zsh/
