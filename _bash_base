@@ -17,7 +17,7 @@ if [ $? -eq 1 ] ; then
 fi
 
 # Require any universal dotfiles
-for dotfile in ~/dotfiles/.universal_*; do
+for dotfile in ~/dotfiles/_universal_*; do
   source ${dotfile}
 done
 
