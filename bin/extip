@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Uses snmpwalk and then cuts out any known private IP addresses to hopefully find your public IP
+
+IP=`snmpwalk -Os -c public -v 1 192.168.1.1 iso.3.6.1.2.1.4.20.1.1 IpAddress | 
+  grep -E -v '(127\.0\.0\.[0-9]{1,}|172\.16\.[0-9]{1,}\.[0-9]{1,}|169\.254\.[0-9]{1,}\.[0-9]{1,}|192\.168\.1\.1)' | 
+  cut -d : -f 2 | 
+  sed 's/ //g'`
+echo $IP

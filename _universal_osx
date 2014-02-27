@@ -1,7 +1,6 @@
 if [[ `uname` = "Darwin" ]]; then
   export EDITOR="mate -w"
-  export PATH="$PATH:/Users/`whoami`/dotfiles/osx_scripts"
-  # export RUBYOPT="-ropenssl" # Attempt resolve most problems with OpenSSL and Ruby.
+  export PATH="$PATH:/Users/`whoami`/dotfiles/bin"
   
   # Mac Directory Services
   alias ldns="dscl localhost -list /Local/Default/Hosts"
