@@ -27,7 +27,7 @@ function unicorn_reload() {
 
 # Rails and Background Tasks
 alias dl="tail -f log/development.log"
-alias sc="./script/console"
+alias sc="rails console"
 alias redisd="dtach -n /tmp/redis.dtach redis-server /etc/redis.conf"
 alias rworker="redisd; resque-pool -c config/resque-pool.yml -E development_workers"
 
