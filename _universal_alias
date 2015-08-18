@@ -1,8 +1,5 @@
-# Random Ruby Stuff
-alias shipit='cap production deploy'
-
 # Nginx
-function nginx_reload() { 
+function nginx_reload() {
   sudo kill -HUP `cat /usr/local/var/run/nginx.pid`
 }
 function nginx_stop() {
@@ -29,7 +26,7 @@ function unicorn_reload() {
 alias dl="tail -f log/development.log"
 alias sc="rails console"
 alias redisd="dtach -n /tmp/redis.dtach redis-server /etc/redis.conf"
-alias rworker="redisd; resque-pool -c config/resque-pool.yml -E development_workers"
+alias rworker="redisd; bundle exec resque-pool -c config/resque-pool.yml -E development_workers"
 
 # Git Shortcuts
 alias gitc='git commit -a -v'
@@ -47,3 +44,9 @@ function watch_requests() {
 
 # Misc Networking
 alias hazip="curl --ipv4 http://icanhazip.com"
+
+function public_ip() {
+  # dig -4 @ns1-1.akamaitech.net -t a whoami.akamai.net +short
+  # dig -4 @resolver1.opendns.com -t a myip.opendns.com +short
+  dig @ns1.google.com -t txt o-o.myaddr.l.google.com +short | sed 's/\"//g'
+}

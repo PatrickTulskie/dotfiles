@@ -1,7 +1,6 @@
 # Don't load this if we're not on a Mac.  That probably means we're on a real server.
 if [[ `uname` = "Darwin" ]]; then
 	# Speed up your ruby tests
-  # export RUBY_HEAP_MIN_SLOTS=1000000
 	export RUBY_GC_HEAP_INIT_SLOTS=1000000
 	export RUBY_HEAP_SLOTS_INCREMENT=1000000
 	export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1

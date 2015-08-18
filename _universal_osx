@@ -1,13 +1,14 @@
 if [[ `uname` = "Darwin" ]]; then
   export EDITOR="mate -w"
   export PATH="$PATH:/Users/`whoami`/dotfiles/bin"
-  
+  export JAVA_HOME="$(/usr/libexec/java_home)"
+
   # Mac Directory Services
   alias ldns="dscl localhost -list /Local/Default/Hosts"
-  ldns_set() { 
+  function ldns_set() { 
     sudo dscl localhost -create /Local/Default/Hosts/$1 IPAddress 127.0.0.1
   }
-  ldns_delete() {
+  function ldns_delete() {
     sudo dscl localhost -delete /Local/Default/Hosts/$1
   }
 
@@ -21,10 +22,33 @@ if [[ `uname` = "Darwin" ]]; then
   # Mac Apache Control
   alias a2restart='sudo /usr/sbin/apachectl restart'
   alias a2conf='mate /etc/apache2/httpd.conf'
-  
+
   # Cleanup the Open With Menu
   alias cleanow="/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user; killall Finder"
-  
-  alias truecrypt="/Applications/TrueCrypt.app/Contents/MacOS/TrueCrypt --text"
-  
+
+  # MariaDB
+  function maria() {
+    case $1 in
+    start)
+      launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.mariadb.plist && return 0
+      echo >&2 "Failed to start for some reason..."
+      ;;
+    stop)
+      launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.mariadb.plist && return 0
+      echo >&2 "Not running"
+      ;;
+    restart)
+      maria stop && maria start
+      ;;
+    *)
+      echo >&2 "Usage: $0 <start|stop|restart>"
+      exit 1
+      ;;
+    esac
+  }
+
+  # The Fuck
+  alias fuck='$(thefuck $(fc -ln -1))'
+  alias FUCK='fuck'
+
 fi
