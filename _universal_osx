@@ -2,18 +2,16 @@ if [[ `uname` = "Darwin" ]]; then
   export EDITOR="mate -w"
   export PATH="$PATH:/Users/`whoami`/dotfiles/bin"
   export JAVA_HOME="$(/usr/libexec/java_home)"
+  export HOMEBREW_NO_ANALYTICS=1
 
   # Mac Directory Services
   alias ldns="dscl localhost -list /Local/Default/Hosts"
-  function ldns_set() { 
+  function ldns_set() {
     sudo dscl localhost -create /Local/Default/Hosts/$1 IPAddress 127.0.0.1
   }
   function ldns_delete() {
     sudo dscl localhost -delete /Local/Default/Hosts/$1
   }
-
-  # Mac Finder Magic
-  alias rootfinder='sudo /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder'
 
   # Mac Firefox Stuff
   alias optff="cd ~/Library/Application\ Support/Firefox/Profiles/; for f in */*.sqlite; do sqlite3 \$f 'VACUUM;'; done; echo Firefox DBs Optimized;"
@@ -51,4 +49,5 @@ if [[ `uname` = "Darwin" ]]; then
   alias fuck='$(thefuck $(fc -ln -1))'
   alias FUCK='fuck'
 
+  alias flushdns='dscacheutil -flushcache;sudo killall -HUP mDNSResponder;say flushed'
 fi
