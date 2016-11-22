@@ -50,4 +50,7 @@ if [[ `uname` = "Darwin" ]]; then
   alias FUCK='fuck'
 
   alias flushdns='dscacheutil -flushcache;sudo killall -HUP mDNSResponder;say flushed'
+
+  # Insecure Chrome for testing XSS
+  alias ichrome='/Applications/Chrome.app/Contents/MacOS/Google\ Chrome --disable-web-security --user-data-dir'
 fi
