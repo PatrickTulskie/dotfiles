@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+ARGF.each_line do |line|
+  key, value = line.split("=")
+  puts "#{key.downcase}: #{value}"
+end
