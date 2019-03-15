@@ -40,17 +40,3 @@ alias gitd='git diff | mate'
 alias gits='git status'
 alias gita='git add *'
 alias gitco='git checkout'
-
-# Network Monitoring
-function watch_requests() {
-  sudo ngrep -q -W byline "^(GET|POST|PUT) .*"
-}
-
-# Misc Networking
-alias hazip="curl --ipv4 http://icanhazip.com"
-
-function public_ip() {
-  # dig -4 @ns1-1.akamaitech.net -t a whoami.akamai.net +short
-  # dig -4 @resolver1.opendns.com -t a myip.opendns.com +short
-  dig @ns1.google.com -t txt o-o.myaddr.l.google.com +short | sed 's/\"//g'
-}
