@@ -40,3 +40,37 @@ alias gitd='git diff | mate'
 alias gits='git status'
 alias gita='git add *'
 alias gitco='git checkout'
+
+# Network Monitoring
+function watch_requests() {
+  sudo ngrep -q -W byline "^(GET|POST|PUT) .*"
+}
+
+# Misc Networking
+alias hazip="curl --ipv4 http://icanhazip.com"
+
+function public_ip() {
+  # dig -4 @ns1-1.akamaitech.net -t a whoami.akamai.net +short
+  # dig -4 @resolver1.opendns.com -t a myip.opendns.com +short
+  dig @ns1.google.com -t txt o-o.myaddr.l.google.com +short | sed 's/\"//g'
+}
+
+function dinghy_proxy() {
+  docker kill dinghy-http-proxy
+  docker run --rm -d \
+    -v /var/run/docker.sock:/tmp/docker.sock:ro \
+    -v ~/.dinghy/certs:/etc/nginx/certs \
+    -p 80:80 -p 443:443 -p 19322:19322/udp \
+    -e DNS_IP=127.0.0.1 -e CONTAINER_NAME=dinghy-http-proxy \
+    --name dinghy-http-proxy \
+    codekitchen/dinghy-http-proxy
+}
+
+function druby() {
+  if [[ $1 != "" ]] ; then
+    ruby_version=":$1"
+  else
+    ruby_version=""
+  fi
+  docker run -it --rm --name "`basename "$PWD"`-`date +%s`" -v "$PWD":/usr/src/myapp -w /usr/src/myapp ruby$ruby_version bash
+}
