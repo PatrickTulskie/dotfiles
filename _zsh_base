@@ -1,13 +1,12 @@
-# Require any private files
-for dotfile in ~/dotfiles/private/_zsh_*; do
-  source ${dotfile}
-done
-
-for dotfile in ~/dotfiles/private/_universal_*; do
-  source ${dotfile}
-done
-
 # Require any universal dotfiles
 for dotfile in ~/dotfiles/_universal_*; do
   source ${dotfile}
 done
+
+# Require any private custom uncommitted files
+if [ -n "$(ls -A ~/dotfiles/private 2>/dev/null)" ]
+then
+  for dotfile in ~/dotfiles/private/_*; do
+    source ${dotfile}
+  done
+fi
