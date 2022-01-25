@@ -1,5 +1,9 @@
-# Require any private _zsh files
+# Require any private files
 for dotfile in ~/dotfiles/private/_zsh_*; do
+  source ${dotfile}
+done
+
+for dotfile in ~/dotfiles/private/_universal_*; do
   source ${dotfile}
 done
 
