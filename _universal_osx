@@ -1,7 +1,6 @@
 if [[ `uname` = "Darwin" ]]; then
   export EDITOR="mate -w"
   export PATH="$PATH:/Users/`whoami`/dotfiles/bin"
-  export JAVA_HOME="$(/usr/libexec/java_home)"
   export HOMEBREW_NO_ANALYTICS=1
 
   # Mac Directory Services
