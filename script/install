@@ -24,3 +24,11 @@ if [[ `uname` = "Darwin" ]]; then
   echo "Installing Jived terminal theme"
   open ~/dotfiles/resources/Jived.terminal
 fi
+
+echo "Setting up vim"
+echo "runtime vimrc" > ~/.vimrc
+mkdir -p ~/.vim/bundle/
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+ln -s ~/dotfiles/vimrc ~/.vim/vimrc
+vim +PluginInstall
+
