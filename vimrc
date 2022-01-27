@@ -162,7 +162,10 @@ vmap y ygv<Esc>
 nmap <F5> :source ~/.vimrc<CR>
 
 "New Tab
-nmap <Leader>n :tabnew<CR>
+"nmap <Leader>n :tabnew<CR>
+map  <C-l> :tabn<CR>
+map  <C-h> :tabp<CR>
+map  <C-n> :tabnew<CR>
 
 "Paste mode toggle
 set pastetoggle=<F5><F5>
@@ -170,6 +173,12 @@ set pastetoggle=<F5><F5>
 "Keep selection after indent
 vnoremap > ><CR>gv
 vnoremap < <<CR>gv
+
+" resize window splits
+nnoremap <Up>    3<C-w>-
+nnoremap <Down>  3<C-w>+
+nnoremap <Left>  3<C-w><
+nnoremap <Right> 3<C-w>>
 
 " "Camel case motion (with shift)
 map <Space>w <Plug>CamelCaseMotion_w
