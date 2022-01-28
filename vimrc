@@ -33,7 +33,8 @@ Plugin 'ap/vim-css-color'
 Plugin 'miripiruni/CSScomb-for-Vim'
 
 "Color Schemes
-Plugin 'vim-scripts/wombat256.vim'
+"Plugin 'vim-scripts/wombat256.vim'
+Plugin 'patricktulskie/monokai-mod.vim'
 
 call vundle#end()            " required
 " }}}
@@ -186,4 +187,6 @@ map <Space>b <Plug>CamelCaseMotion_b
 map <Space>e <Plug>CamelCaseMotion_e
 " }}}
 
-colorscheme wombat256mod
+"colorscheme wombat256mod
+colorscheme monokai-mod
+
