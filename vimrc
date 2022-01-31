@@ -31,6 +31,9 @@ Plugin 'Yggdroot/indentLine'
 Bundle 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-rails'
 
+"rust
+Plugin 'rust-lang/rust.vim'
+
 "Formatting
 Plugin 'tpope/vim-sleuth'
 
