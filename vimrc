@@ -32,7 +32,7 @@ Bundle 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-rails'
 
 "Formatting
-Plugin 'tpope/sleuth'
+Plugin 'tpope/vim-sleuth'
 
 "Front End
 Plugin 'pangloss/vim-javascript'
