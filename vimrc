@@ -27,6 +27,13 @@ Plugin 'ConradIrwin/vim-bracketed-paste'
 Plugin 'gcmt/wildfire.vim'
 Plugin 'Yggdroot/indentLine'
 
+"ruby
+Bundle 'vim-ruby/vim-ruby'
+Plugin 'tpope/vim-rails'
+
+"Formatting
+Plugin 'tpope/sleuth'
+
 "Front End
 Plugin 'pangloss/vim-javascript'
 Plugin 'ap/vim-css-color'
@@ -137,7 +144,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 " Some Useful Key Mappings {{{
 
 "Split swap
-nmap <Tab> :CtrlPBuffer<CR>
+"nmap <Tab> :CtrlPBuffer<CR>
 nmap <Leader>f :CtrlPLine<CR>
 nnoremap <silent> <Leader>sw :call WindowSwap#EasyWindowSwap()<CR>
 nmap <Leader>` :call WindowSwap#EasyWindowSwap()<CR><Leader>[:call WindowSwap#EasyWindowSwap()<CR>
