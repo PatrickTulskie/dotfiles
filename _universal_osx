@@ -1,5 +1,5 @@
 if [[ `uname` = "Darwin" ]]; then
-  export EDITOR="mate -w"
+  export EDITOR="vim"
   export PATH="$PATH:/Users/`whoami`/dotfiles/bin"
   export HOMEBREW_NO_ANALYTICS=1
 

@@ -191,6 +191,14 @@ nnoremap <Down>  3<C-w>+
 nnoremap <Left>  3<C-w><
 nnoremap <Right> 3<C-w>>
 
+" Moving lines around
+"nnoremap <A-j> :m .+1<CR>==
+"nnoremap <A-k> :m .-2<CR>==
+"inoremap <A-j> <Esc>:m .+1<CR>==gi
+"inoremap <A-k> <Esc>:m .-2<CR>==gi
+"vnoremap <A-j> :m '>+1<CR>gv=gv
+"vnoremap <A-k> :m '<-2<CR>gv=gv
+
 " "Camel case motion (with shift)
 map <Space>w <Plug>CamelCaseMotion_w
 map <Space>b <Plug>CamelCaseMotion_b

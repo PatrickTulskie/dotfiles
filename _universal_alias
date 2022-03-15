@@ -72,5 +72,5 @@ function druby() {
   else
     ruby_version=""
   fi
-  docker run -it --rm --name "`basename "$PWD"`-`date +%s`" -v "$PWD":/usr/src/myapp -w /usr/src/myapp ruby$ruby_version bash
+  docker run -it --rm --name "`basename "$PWD"`-`date +%s`" --mount src=`pwd`,target=/usr/src/myapp,type=bind -w /usr/src/myapp ruby$ruby_version bash
 }
