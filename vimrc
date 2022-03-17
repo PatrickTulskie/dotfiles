@@ -52,6 +52,7 @@ call vundle#end()            " required
 " Plugin Settings {{{
 let g:windowswap_map_keys = 0 "prevent default bindings
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+let g:ctrlp_match_window = 'results:25' " overcome limit imposed by max height
 let g:snipMate = { 'snippet_version' : 1 }
 " }}}
 
