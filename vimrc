@@ -34,6 +34,9 @@ Plugin 'tpope/vim-rails'
 "rust
 Plugin 'rust-lang/rust.vim'
 
+"golang
+Plugin 'fatih/vim-go'
+
 "Formatting
 Plugin 'tpope/vim-sleuth'
 
