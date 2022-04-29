@@ -22,6 +22,7 @@ Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'wesQ3/vim-windowswap'
 Plugin 'tpope/vim-surround'
 "Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'ervandew/supertab'
 Plugin 'ConradIrwin/vim-bracketed-paste'
@@ -121,7 +122,7 @@ filetype plugin indent on
 set encoding=utf-8
 set fileencodings=utf-8
 
-set rtp+=/usr/local/opt/fzf
+"set rtp+=/usr/local/opt/fzf
 
 set autoindent
 set smartindent
