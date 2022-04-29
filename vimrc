@@ -21,7 +21,8 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'wesQ3/vim-windowswap'
 Plugin 'tpope/vim-surround'
-Plugin 'ctrlpvim/ctrlp.vim'
+"Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'junegunn/fzf.vim'
 Plugin 'ervandew/supertab'
 Plugin 'ConradIrwin/vim-bracketed-paste'
 Plugin 'gcmt/wildfire.vim'
@@ -54,8 +55,8 @@ call vundle#end()            " required
 
 " Plugin Settings {{{
 let g:windowswap_map_keys = 0 "prevent default bindings
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
-let g:ctrlp_match_window = 'results:25' " overcome limit imposed by max height
+"let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+"let g:ctrlp_match_window = 'results:25' " overcome limit imposed by max height
 let g:snipMate = { 'snippet_version' : 1 }
 " }}}
 
@@ -120,6 +121,8 @@ filetype plugin indent on
 set encoding=utf-8
 set fileencodings=utf-8
 
+set rtp+=/usr/local/opt/fzf
+
 set autoindent
 set smartindent
 set cindent
@@ -152,9 +155,13 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 "Split swap
 "nmap <Tab> :CtrlPBuffer<CR>
-nmap <Leader>f :CtrlPLine<CR>
+"nmap <Leader>f :CtrlPLine<CR>
 nnoremap <silent> <Leader>sw :call WindowSwap#EasyWindowSwap()<CR>
 nmap <Leader>` :call WindowSwap#EasyWindowSwap()<CR><Leader>[:call WindowSwap#EasyWindowSwap()<CR>
+
+"Searching
+nmap <C-P> :FZF<CR>
+nmap <C-A> :Ag<CR>
 
 "for unhighlighing the selections
 nmap <Space>x :let @/=''<CR>
