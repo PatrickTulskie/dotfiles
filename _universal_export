@@ -1,3 +1,4 @@
 export PATH="$PATH:/usr/local/mysql/bin"
 export PATH="$PATH:./.cargo/bin"
 export PATH="./bin:$PATH"
+export RUST_WITHOUT=rust-docs
