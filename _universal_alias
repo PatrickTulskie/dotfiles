@@ -66,11 +66,13 @@ function dinghy_proxy() {
     ltvco/dinghy-http-proxy:latest
 }
 
+alias ccdaemon='docker run -d -p 8000:8000 mpepping/cyberchef'
+
 function druby() {
   if [[ $1 != "" ]] ; then
     ruby_version=":$1"
   else
     ruby_version=""
   fi
-  docker run -it --rm --name "`basename "$PWD"`-`date +%s`" --mount src=`pwd`,target=/usr/src/myapp,type=bind -w /usr/src/myapp ruby$ruby_version bash
+  docker run -it --rm --network host --name "`basename "$PWD"`-`date +%s`" --mount src=`pwd`,target=/usr/src/myapp,type=bind -w /usr/src/myapp ruby$ruby_version bash
 }
