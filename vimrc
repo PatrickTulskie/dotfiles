@@ -30,6 +30,9 @@ Plugin 'ConradIrwin/vim-bracketed-paste'
 Plugin 'gcmt/wildfire.vim'
 Plugin 'Yggdroot/indentLine'
 
+"dockerfile
+Plugin 'ekalinin/Dockerfile.vim'
+
 "ruby
 Bundle 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-rails'
