@@ -29,6 +29,7 @@ Plugin 'ervandew/supertab'
 Plugin 'ConradIrwin/vim-bracketed-paste'
 Plugin 'gcmt/wildfire.vim'
 Plugin 'Yggdroot/indentLine'
+Plugin 'github/copilot.vim'
 
 "dockerfile
 Plugin 'ekalinin/Dockerfile.vim'
@@ -156,7 +157,12 @@ set backspace=indent,eol,start
 autocmd BufWritePre * :%s/\s\+$//e
 " }}}
 
-" Some Useful Key Mappings {{{
+if has('persistent_undo')      "check if your vim version supports it
+  set undofile                 "turn on the feature
+  set undodir=$HOME/.vim/undo  "directory where the undo files will be stored
+  endif
+
+"Some Useful Key Mappings {{{
 
 "Split swap
 "nmap <Tab> :CtrlPBuffer<CR>
