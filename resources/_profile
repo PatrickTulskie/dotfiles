@@ -7,14 +7,17 @@ stty erase ^H
 ##
 echo $PATH | grep -q -s "/usr/local/bin"
 if [ $? -eq 1 ] ; then
-    # PATH=$PATH:/usr/local/bin
     PATH=/usr/local/bin:$PATH
     export PATH
 fi
 
 echo $PATH | grep -q -s "/usr/local/sbin"
 if [ $? -eq 1 ] ; then
-    # PATH=$PATH:/usr/local/sbin
     PATH=/usr/local/sbin:$PATH
     export PATH
 fi
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

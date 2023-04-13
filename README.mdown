@@ -2,9 +2,7 @@
 
 These are my dotfiles.  There are many like them, but these are mine.
 
-They are all (currently) for ZSH.  I use oh-my-zsh (https://github.com/robbyrussell/oh-my-zsh) and you should too.
-
-As I get around to cleaning up the rest of my scripts and dotfiles I'll add them in here.  I just needed a clean repo so I can slurp down my dotfiles when I'm building new servers.
+They are all (currently) for ZSH.  I use oh-my-zsh (https://github.com/ohmyzsh/ohmyzsh).
 
 ## Installation and Useage
 
