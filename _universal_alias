@@ -81,3 +81,7 @@ function druby() {
   fi
   docker run -it --rm --network host --name "`basename "$PWD"`-`date +%s`" --mount src=`pwd`,target=/usr/src/myapp,type=bind -w /usr/src/myapp ruby$ruby_version bash
 }
+
+batdiff() {
+  git diff --name-only --relative --diff-filter=d | xargs bat --diff
+}
