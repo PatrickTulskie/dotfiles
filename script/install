@@ -23,6 +23,10 @@ echo "Installed jived oh-my-zsh themes"
 if [[ `uname` = "Darwin" ]]; then
   echo "Installing Jived terminal theme"
   open ~/dotfiles/resources/Jived.terminal
+
+  echo "Setting up iTerm2"
+  defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.dotfiles/resources/"
+  defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
 fi
 
 echo "Setting up vim"
