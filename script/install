@@ -21,6 +21,9 @@ cp ~/dotfiles/resources/jived*.zsh-theme ~/.oh-my-zsh/custom/themes/
 echo "Installed jived oh-my-zsh themes"
 
 if [[ `uname` = "Darwin" ]]; then
+  echo "Installing Fonts"
+  brew install font-meslo-lg-nerd-font
+
   echo "Installing Jived terminal theme"
   open ~/dotfiles/resources/Jived.terminal
 
