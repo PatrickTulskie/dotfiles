@@ -30,6 +30,9 @@ if [[ `uname` = "Darwin" ]]; then
   echo "Setting up iTerm2"
   defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.dotfiles/resources/"
   defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+
+  echo "macOS Specific Config"
+  defaults write -g ApplePressAndHoldEnabled -bool false
 fi
 
 echo "Setting up vim"
