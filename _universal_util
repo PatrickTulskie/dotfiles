@@ -1,3 +1,13 @@
+# Pull all URLs from a sitemap.xml file
+function siteurls() {
+  curl -s $1/sitemap.xml | grep -e loc | sed 's|<loc>\(.*\)<\/loc>$|\1|g'
+}
+
+# Get the date of an SSL certificate
+function datecert() {
+  echo | openssl s_client -connect $1:443 2>/dev/null | openssl x509 -noout -dates
+}
+
 # Network Monitoring
 function watch_requests() {
   sudo ngrep -q -W byline "^(GET|POST|PUT) .*"
@@ -6,12 +16,37 @@ function watch_requests() {
 # Misc Networking
 alias hazip="curl --ipv4 http://icanhazip.com"
 
+# Lookup public IP address
 function public_ip() {
   # dig -4 @ns1-1.akamaitech.net -t a whoami.akamai.net +short
   # dig -4 @resolver1.opendns.com -t a myip.opendns.com +short
   dig @ns1.google.com -t txt o-o.myaddr.l.google.com +short | sed 's/\"//g'
 }
 
-function siteurls() {
-  curl -s $1/sitemap.xml | grep -e loc | sed 's|<loc>\(.*\)<\/loc>$|\1|g'
+# Docker Based Functions
+function dinghy_proxy() {
+  docker kill dinghy-http-proxy
+  docker run --rm -d \
+    -v /var/run/docker.sock:/tmp/docker.sock:ro \
+    -v ~/.dinghy/certs:/etc/nginx/certs \
+    -p 80:80 -p 443:443 -p 19322:19322/udp \
+    -e DNS_IP=127.0.0.1 -e CONTAINER_NAME=dinghy-http-proxy \
+    --name dinghy-http-proxy \
+    ltvco/dinghy-http-proxy:latest
+}
+
+function ccdaemon() {
+  docker kill cyberchef
+  docker run --rm -d -e CONTAINER_NAME=cyberchef --name cyberchef -p 8000:8000 mpepping/cyberchef
+
+  echo "Cyberchef is now running at http://localhost:8000"
+}
+
+function druby() {
+  if [[ $1 != "" ]] ; then
+    ruby_version=":$1"
+  else
+    ruby_version=""
+  fi
+  docker run -it --rm --network host --name "`basename "$PWD"`-`date +%s`" --mount src=`pwd`,target=/usr/src/myapp,type=bind -w /usr/src/myapp ruby$ruby_version bash
 }

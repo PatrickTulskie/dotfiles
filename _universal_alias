@@ -1,37 +1,3 @@
-# Nginx
-function nginx_reload() {
-  sudo kill -HUP `cat /usr/local/var/run/nginx.pid`
-}
-function nginx_stop() {
-  sudo kill `cat /usr/local/var/run/nginx.pid`
-}
-alias nginx_start="sudo nginx"
-
-# Unicorn
-function unicorn_start() {
-  bundle exec unicorn -D -c `pwd`/config/unicorn_dev.rb
-}
-function unicorn_stop() {
-  pid_file=`pwd`/tmp/pids/unicorn.pid
-  unicorn_pid=`cat $pid_file`
-  kill $unicorn_pid
-}
-function unicorn_reload() {
-  pid_file=`pwd`/tmp/pids/unicorn.pid
-  unicorn_pid=`cat $pid_file`
-  kill -USR2 $unicorn_pid
-}
-
-function datecert() {
-  echo | openssl s_client -connect $1:443 2>/dev/null | openssl x509 -noout -dates
-}
-
-# Rails and Background Tasks
-alias dl="tail -f log/development.log"
-alias sc="rails console"
-alias redisd="dtach -n /tmp/redis.dtach redis-server /etc/redis.conf"
-alias rworker="redisd; bundle exec resque-pool -c config/resque-pool.yml -E development_workers"
-
 # Git Shortcuts
 alias gitc='git commit -a -v'
 alias gitp='git push'
@@ -40,47 +6,6 @@ alias gitd='git diff'
 alias gits='git status'
 alias gita='git add *'
 alias gitco='git checkout'
-
-# Network Monitoring
-function watch_requests() {
-  sudo ngrep -q -W byline "^(GET|POST|PUT) .*"
-}
-
-# Misc Networking
-alias hazip="curl --ipv4 http://icanhazip.com"
-
-function public_ip() {
-  # dig -4 @ns1-1.akamaitech.net -t a whoami.akamai.net +short
-  # dig -4 @resolver1.opendns.com -t a myip.opendns.com +short
-  dig @ns1.google.com -t txt o-o.myaddr.l.google.com +short | sed 's/\"//g'
-}
-
-function dinghy_proxy() {
-  docker kill dinghy-http-proxy
-  docker run --rm -d \
-    -v /var/run/docker.sock:/tmp/docker.sock:ro \
-    -v ~/.dinghy/certs:/etc/nginx/certs \
-    -p 80:80 -p 443:443 -p 19322:19322/udp \
-    -e DNS_IP=127.0.0.1 -e CONTAINER_NAME=dinghy-http-proxy \
-    --name dinghy-http-proxy \
-    ltvco/dinghy-http-proxy:latest
-}
-
-function ccdaemon() {
-  docker kill cyberchef
-  docker run --rm -d -e CONTAINER_NAME=cyberchef --name cyberchef -p 8000:8000 mpepping/cyberchef
-
-  echo "Cyberchef is now running at http://localhost:8000"
-}
-
-function druby() {
-  if [[ $1 != "" ]] ; then
-    ruby_version=":$1"
-  else
-    ruby_version=""
-  fi
-  docker run -it --rm --network host --name "`basename "$PWD"`-`date +%s`" --mount src=`pwd`,target=/usr/src/myapp,type=bind -w /usr/src/myapp ruby$ruby_version bash
-}
 
 batdiff() {
   git diff --name-only --relative --diff-filter=d | xargs bat --diff

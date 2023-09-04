@@ -1,0 +1,30 @@
+if [[ `uname` = "Darwin" ]]; then
+  export PATH="$PATH:/Users/`whoami`/dotfiles/bin"
+  export EDITOR="vim"
+  export HOMEBREW_NO_ANALYTICS=1
+
+  # Mac Directory Services
+  alias ldns="dscl localhost -list /Local/Default/Hosts"
+  function ldns_set() {
+    sudo dscl localhost -create /Local/Default/Hosts/$1 IPAddress 127.0.0.1
+  }
+  function ldns_delete() {
+    sudo dscl localhost -delete /Local/Default/Hosts/$1
+  }
+
+  # Mac Firefox Stuff
+  alias optff="cd ~/Library/Application\ Support/Firefox/Profiles/; for f in */*.sqlite; do sqlite3 \$f 'VACUUM;'; done; echo Firefox DBs Optimized;"
+  alias ffpm="/Applications/Firefox.app/Contents/MacOS/firefox-bin -ProfileManager"
+
+  # Cleanup the Open With Menu
+  alias cleanow="/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user; killall Finder"
+
+  # The Fuck
+  alias fuck='$(thefuck $(fc -ln -1))'
+  alias FUCK='fuck'
+
+  alias flushdns='dscacheutil -flushcache;sudo killall -HUP mDNSResponder;say flushed'
+
+  # Insecure Chrome for testing XSS
+  alias ichrome='/Applications/Chrome.app/Contents/MacOS/Google\ Chrome --disable-web-security --user-data-dir'
+fi
