@@ -24,6 +24,8 @@ function public_ip() {
 }
 
 # Docker Based Functions
+alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.1.1'
+
 function dinghy_proxy() {
   docker kill dinghy-http-proxy
   docker run --rm -d \
