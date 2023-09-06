@@ -4,4 +4,13 @@ if [[ `uname` = "Linux" ]]; then
   alias fuck='$(thefuck $(fc -ln -1))'
   alias FUCK='fuck'
 
+  function ghost_mode() {
+    sudo service mariadb stop
+    sudo service avahi-daemon stop
+    sudo service cups stop
+    sudo service tor stop
+    sudo service smbd stop
+    service --status-all
+  }
+
 fi
