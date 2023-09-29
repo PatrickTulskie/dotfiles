@@ -129,6 +129,7 @@ set fileencodings=utf-8
 
 "set rtp+=/usr/local/opt/fzf
 
+set belloff=all
 set autoindent
 set smartindent
 set cindent
