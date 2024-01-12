@@ -37,6 +37,17 @@ function dinghy_proxy() {
     ltvco/dinghy-http-proxy:latest
 }
 
+function ollama-web() {
+  docker kill ollama-webui
+  docker run -d \
+    -p 3000:8080 \
+    --add-host=host.docker.internal:host-gateway \
+    -v ollama-webui:/app/backend/data \
+    --name ollama-webui \
+    --restart always \
+    ghcr.io/ollama-webui/ollama-webui:main
+}
+
 function ccdaemon() {
   docker kill cyberchef
   docker run --rm -d -e CONTAINER_NAME=cyberchef --name cyberchef -p 8000:8000 mpepping/cyberchef
