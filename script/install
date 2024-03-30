@@ -20,14 +20,6 @@ echo "Dropped in .profile file"
 cp ~/dotfiles/resources/jived*.zsh-theme ~/.oh-my-zsh/custom/themes/
 echo "Installed jived oh-my-zsh themes"
 
-OS=$(uname -s)
-if [ "$OS" = "Linux" ]; then
-  if ps aux | grep [X]org > /dev/null; then
-    echo "Installing Lepton Firefox Tab Fixes"
-    bash -c "$(curl -fsSL https://raw.githubusercontent.com/black7375/Firefox-UI-Fix/master/install.sh)"
-  fi
-fi
-
 if [[ "$OS" = "Darwin" ]]; then
   echo "Installing Fonts"
   brew install font-meslo-lg-nerd-font
@@ -41,9 +33,6 @@ if [[ "$OS" = "Darwin" ]]; then
 
   echo "macOS Specific Config"
   defaults write -g ApplePressAndHoldEnabled -bool false
-
-  echo "Installing Lepton Firefox Tab Fixes"
-  bash -c "$(curl -fsSL https://raw.githubusercontent.com/black7375/Firefox-UI-Fix/master/install.sh)"
 fi
 
 echo "Setting up vim"
