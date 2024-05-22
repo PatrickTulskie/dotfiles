@@ -38,14 +38,14 @@ function dinghy_proxy() {
 }
 
 function ollama-web() {
-  docker kill ollama-webui
+  docker kill open-webui
   docker run -d \
     -p 3000:8080 \
     --add-host=host.docker.internal:host-gateway \
-    -v ollama-webui:/app/backend/data \
-    --name ollama-webui \
+    -v open-webui:/app/backend/data \
+    --name open-webui \
     --restart always \
-    ghcr.io/ollama-webui/ollama-webui:main
+    ghcr.io/open-webui/open-webui:main
 }
 
 function ccdaemon() {
