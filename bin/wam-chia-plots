@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Check if two arguments were provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 /source/directory user@host:/destination/directory"
+    exit 1
+fi
+
+# Assign the first argument as the source directory
+WATCHED_DIR=$1
+
+# Assign the second argument as the destination for rsync
+DESTINATION=$2
+
+# Rsync command with variables
+RSYNC_COMMAND="rsync --remove-source-files --progress -av --no-perms --exclude \".Spotlight*\" --exclude \".fseventsd\" --exclude \".DS_Store\" $WATCHED_DIR/*.plot $DESTINATION"
+
+# Function to execute when a new .plot file is detected
+on_file_created() {
+    echo "New .plot file detected. Starting rsync..."
+    eval $RSYNC_COMMAND
+}
+
+# Start watching the directory
+fswatch -o "$WATCHED_DIR" | while read num; do
+    # Check for new .plot files in the directory
+    new_plots=$(find "$WATCHED_DIR" -maxdepth 1 -name '*.plot' -print -quit)
+    if [[ ! -z "$new_plots" ]]; then
+        on_file_created
+    fi
+done
