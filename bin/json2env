@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'json'
+
+# Read the JSON input from stdin
+secrets = STDIN.read
+
+# Parse the JSON input into a Ruby hash
+secrets_hash = JSON.parse(secrets)
+
+# Loop through each secret key-value pair
+secrets_hash.each do |key, value|
+  # Check if the value is a number and wrap it in quotes if it is
+  if value.is_a?(Numeric)
+    value = "\"#{value}\""
+  end
+
+  # Write the key-value pair to stdout in the format "KEY=VALUE"
+  puts "#{key}=#{value}"
+end
