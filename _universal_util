@@ -38,7 +38,13 @@ function dinghy_proxy() {
 }
 
 function ollama-web() {
-  docker kill open-webui
+  # Kill and remove the container if it exists
+  docker rm -f open-webui 2>/dev/null
+
+  # Pull the latest image
+  docker pull ghcr.io/open-webui/open-webui:main
+
+  # Run the container
   docker run -d \
     -p 3000:8080 \
     --add-host=host.docker.internal:host-gateway \
