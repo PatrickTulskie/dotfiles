@@ -1,0 +1,18 @@
+# Visual
+theme = "Monokai Soda"
+font-family = "MesloLGS Nerd Font Mono"
+
+# Keybindings
+keybind = cmd+opt+right=next_tab
+keybind = cmd+opt+left=previous_tab
+# backspace is ctrl+h
+keybind = backspace=text:\x08
+
+# Behaviors
+window-inherit-working-directory = false
+working-directory = home
+
+# Cursor Customization
+# cursor-style = block
+# cursor-style-blink = false
+# shell-integration-features = no-cursor
