@@ -2,44 +2,21 @@
 
 These are my dotfiles.  There are many like them, but these are mine.
 
-They are all (currently) for ZSH.  I use oh-my-zsh (https://github.com/ohmyzsh/ohmyzsh).
+They are mostly for ZSH and Mac, but I use them on Linux too.  I use oh-my-zsh (https://github.com/ohmyzsh/ohmyzsh).
 
-## Installation and Useage
+## Installation and Usage
 
-I put this stuff in ~/dotfiles and then I source all of them in my .zshrc file with the following:
+Run `script/install` if you just want to set it up.
+
+Alternatively, you can clone this repo and then source the files you want in your .zshrc file like so:
 
     for dotfile in ~/dotfiles/_zsh_*; do
       source ${dotfile}
     done
 
-If you want to simplify things a bit, you can run script/install, but it makes a bunch of assumptions and it may not be best for your particular system.
-
-Your exact setup may vary.
-
-## What's In Here?
-
-    ├── _zsh_alias   # My basic aliases for development.
-    ├── _zsh_base    # My base dotfile that is mainly just for loading my private dotfiles.
-    ├── _zsh_export  # My export functions.  Sets up basic environment things like my editor (TextMate) and MySQL path.
-    ├── _zsh_osx     # Sets up my OS X specific aliases.
-    ├── _zsh_rubygc  # Sets up REE's GC settings so that tests are fast.
-    ├── README.mdown # The file you're currently reading.
-    └── private      # Private directory in the .gitignore for things you don't want to share and/or put in version control.
-        └── _zsh_your_private_stuff
-
 ## Notes
-
-Use these at your own risk.  Make sure you look through them before you just toss them into your system.  They work for me, but they might make your computer explode and/or have babies.  I'm not responsible for explosions or babies.
-
-I use RVM locally and in production and several of my dotfiles assume RVM is installed.  You may want to customize for your own needs.
-
-## More Notes
 
 Not a bad idea to install meslo nerd fonts:
 
     brew tap homebrew/cask-fonts
     brew install font-meslo-lg-nerd-font
-
-## Contributions
-
-I love contributions.  Just fork, make your changes, and submit a pull request.
