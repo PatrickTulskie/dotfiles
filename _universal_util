@@ -37,6 +37,17 @@ function dinghy_proxy() {
     ltvco/dinghy-http-proxy:latest
 }
 
+function aider() {
+  docker pull paulgauthier/aider-full
+  docker run -it --rm --volume $(pwd):/app paulgauthier/aider-full --openai-api-key $OPENAI_API_KEY
+}
+
+function aider-claude() {
+  docker pull paulgauthier/aider-full
+  docker run -it --rm --volume $(pwd):/app paulgauthier/aider-full --anthropic-api-key $ANTHROPIC_API_KEY --cache-prompts --no-stream
+}
+
+# Legacy command... using https://github.com/patricktulskie/automation-lab instead
 function ollama-web() {
   # Kill and remove the container if it exists
   docker rm -f open-webui 2>/dev/null
