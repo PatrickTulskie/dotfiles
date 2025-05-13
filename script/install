@@ -17,7 +17,7 @@ fi
 cp ~/dotfiles/resources/_profile ~/.profile
 echo "Dropped in .profile file"
 
-cp ~/dotfiles/resources/themes/zsh/*.zsh-theme ~/.oh-my-zsh/custom/themes/
+cp ~/dotfiles/resources/themes/zsh/*.zsh-theme ~/.ohmyzsh/custom/themes/
 echo "Installed oh-my-zsh themes"
 
 if [[ "$OS" = "Darwin" ]]; then
