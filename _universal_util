@@ -27,15 +27,24 @@ function public_ip() {
 alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.1.1'
 
 function dinghy_proxy() {
-  docker kill dinghy-http-proxy
+  echo "Starting the Dinghy Proxy..."
+
+  # Kill any existing copies of dinghy-http-proxy and wait for it to stop
+  [ "$(docker ps -a | grep dinghy-http-proxy)" ] && docker kill dinghy-http-proxy
+
+  sleep 5
+
+  # Start up a fresh copy of the proxy
   docker run --rm -d \
+    --security-opt=label=type:docker_t \
     -v /var/run/docker.sock:/tmp/docker.sock:ro \
     -v ~/.dinghy/certs:/etc/nginx/certs \
     -p 80:80 -p 443:443 -p 19322:19322/udp \
     -e DNS_IP=127.0.0.1 -e CONTAINER_NAME=dinghy-http-proxy \
     --name dinghy-http-proxy \
-    ltvco/dinghy-http-proxy:latest
+    ltvco/dinghy-http-proxy
 }
+
 
 function aider() {
   docker pull paulgauthier/aider-full

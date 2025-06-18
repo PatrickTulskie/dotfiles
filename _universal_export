@@ -1,4 +1,5 @@
 export RUST_WITHOUT=rust-docs
+export PODMAN_COMPOSE_WARNING_LOGS=false
 
 export PATH="$PATH:/usr/local/mysql/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
