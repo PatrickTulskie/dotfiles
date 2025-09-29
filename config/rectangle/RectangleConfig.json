@@ -289,8 +289,20 @@
       "modifierFlags" : 1835008
     },
     "maximize" : {
-      "keyCode" : 36,
-      "modifierFlags" : 786432
+      "keyCode" : 46,
+      "modifierFlags" : 1835008
+    },
+    "maximizeHeight" : {
+      "keyCode" : 126,
+      "modifierFlags" : 917504
+    },
+    "nextDisplay" : {
+      "keyCode" : 124,
+      "modifierFlags" : 1835008
+    },
+    "previousDisplay" : {
+      "keyCode" : 123,
+      "modifierFlags" : 1835008
     },
     "reflowTodo" : {
       "keyCode" : 45,
