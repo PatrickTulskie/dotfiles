@@ -85,7 +85,16 @@ function druby() {
   if [[ $1 != "" ]] ; then
     ruby_version=":$1"
   else
-    ruby_version=""
+    ruby_version=":slim"
   fi
   docker run -it --rm --network host --name "`basename "$PWD"`-`date +%s`" --mount src=`pwd`,target=/usr/src/myapp,type=bind -w /usr/src/myapp ruby$ruby_version bash
+}
+
+function dpython() {
+  if [[ $1 != "" ]] ; then
+    python_version=":$1"
+  else
+    python_version=":slim"
+  fi
+  docker run -it --rm --network host --name "`basename "$PWD"`-`date +%s`" --mount src=`pwd`,target=/usr/src/myapp,type=bind -w /usr/src/myapp python$python_version bash
 }
