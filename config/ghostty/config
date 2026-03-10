@@ -11,6 +11,8 @@ keybind = backspace=text:\x08
 # Behaviors
 window-inherit-working-directory = false
 working-directory = home
+tab-inherit-working-directory = false
+split-inherit-working-directory = false
 
 # Cursor Customization
 # cursor-style = block
