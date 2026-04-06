@@ -15,7 +15,7 @@ export DISABLE_AUTO_UPDATE="true"
 # Plugins
 plugins=(
   macos
-  asdf
+  mise
   direnv
 )
 
