@@ -45,3 +45,7 @@ vim +PluginInstall
 echo "Link Ghostty Config"
 mkdir -p ~/.config/ghostty
 ln -s ~/dotfiles/config/ghostty/config ~/.config/ghostty/config
+
+echo "Link cmux Config"
+mkdir -p ~/.config/cmux
+ln -s ~/dotfiles/config/cmux/settings.json ~/.config/cmux/settings.json
