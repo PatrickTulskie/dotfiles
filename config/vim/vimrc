@@ -9,18 +9,12 @@ Plugin 'bling/vim-airline'
 Plugin 'bkad/CamelCaseMotion'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'AndrewRadev/splitjoin.vim'
-Plugin 'kristijanhusak/vim-multiple-cursors'
 Plugin 'joom/vim-commentary'
-Plugin 'vim-scripts/Align'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'wesQ3/vim-windowswap'
 Plugin 'tpope/vim-surround'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
-Plugin 'ervandew/supertab'
-Plugin 'ConradIrwin/vim-bracketed-paste'
 Plugin 'gcmt/wildfire.vim'
 Plugin 'Yggdroot/indentLine'
 "dockerfile
@@ -42,7 +36,10 @@ Plugin 'tpope/vim-sleuth'
 "Front End
 Plugin 'pangloss/vim-javascript'
 Plugin 'ap/vim-css-color'
-Plugin 'miripiruni/CSScomb-for-Vim'
+
+" Pending Removal
+"Plugin 'vim-scripts/Align'
+"Plugin 'ConradIrwin/vim-bracketed-paste'
 
 Plugin 'patricktulskie/monokai-mod.vim'
 
@@ -50,7 +47,6 @@ call vundle#end()            " required
 " }}}
 
 " Plugin Settings {{{
-let g:windowswap_map_keys = 0 "prevent default bindings
 " }}}
 
 " Airline {{{
@@ -149,9 +145,6 @@ if has('persistent_undo')      "check if your vim version supports it
   endif
 
 "Some Useful Key Mappings {{{
-
-nnoremap <silent> <Leader>sw :call WindowSwap#EasyWindowSwap()<CR>
-nmap <Leader>` :call WindowSwap#EasyWindowSwap()<CR><Leader>[:call WindowSwap#EasyWindowSwap()<CR>
 
 "Searching
 nmap <C-P> :FZF<CR>
