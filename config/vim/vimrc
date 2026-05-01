@@ -9,7 +9,7 @@ Plugin 'bling/vim-airline'
 Plugin 'bkad/CamelCaseMotion'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'joom/vim-commentary'
+Plugin 'tpope/vim-commentary'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'tpope/vim-surround'
@@ -100,8 +100,6 @@ filetype off
 set foldmethod=marker
 set linebreak
 
-set number
-
 syntax on
 set mouse=a
 
@@ -132,7 +130,6 @@ set noswapfile
 set nobackup
 set number
 set linespace=3
-set backspace=2
 set backspace=indent,eol,start
 
 " Remove trailing whitespace on save
@@ -175,7 +172,7 @@ map  <C-h> :tabp<CR>
 map  <C-n> :tabnew<CR>
 
 "Paste mode toggle
-set pastetoggle=<F5><F5>
+set pastetoggle=<F6>
 
 "Keep selection after indent
 vnoremap > ><CR>gv
