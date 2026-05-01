@@ -13,24 +13,16 @@ Plugin 'AndrewRadev/splitjoin.vim'
 Plugin 'kristijanhusak/vim-multiple-cursors'
 Plugin 'joom/vim-commentary'
 Plugin 'vim-scripts/Align'
-"Plugin 'valloric/MatchTagAlways'
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
-Plugin 'honza/vim-snippets'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'wesQ3/vim-windowswap'
 Plugin 'tpope/vim-surround'
-"Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'ervandew/supertab'
 Plugin 'ConradIrwin/vim-bracketed-paste'
 Plugin 'gcmt/wildfire.vim'
 Plugin 'Yggdroot/indentLine'
-Plugin 'github/copilot.vim'
-
 "dockerfile
 Plugin 'ekalinin/Dockerfile.vim'
 
@@ -52,8 +44,6 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'ap/vim-css-color'
 Plugin 'miripiruni/CSScomb-for-Vim'
 
-"Color Schemes
-"Plugin 'vim-scripts/wombat256.vim'
 Plugin 'patricktulskie/monokai-mod.vim'
 
 call vundle#end()            " required
@@ -61,9 +51,6 @@ call vundle#end()            " required
 
 " Plugin Settings {{{
 let g:windowswap_map_keys = 0 "prevent default bindings
-"let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
-"let g:ctrlp_match_window = 'results:25' " overcome limit imposed by max height
-let g:snipMate = { 'snippet_version' : 1 }
 " }}}
 
 " Airline {{{
@@ -127,8 +114,6 @@ filetype plugin indent on
 set encoding=utf-8
 set fileencodings=utf-8
 
-"set rtp+=/usr/local/opt/fzf
-
 set belloff=all
 set autoindent
 set smartindent
@@ -165,9 +150,6 @@ if has('persistent_undo')      "check if your vim version supports it
 
 "Some Useful Key Mappings {{{
 
-"Split swap
-"nmap <Tab> :CtrlPBuffer<CR>
-"nmap <Leader>f :CtrlPLine<CR>
 nnoremap <silent> <Leader>sw :call WindowSwap#EasyWindowSwap()<CR>
 nmap <Leader>` :call WindowSwap#EasyWindowSwap()<CR><Leader>[:call WindowSwap#EasyWindowSwap()<CR>
 
@@ -195,8 +177,6 @@ vmap y ygv<Esc>
 "Reload vimrc
 nmap <F5> :source ~/.vimrc<CR>
 
-"New Tab
-"nmap <Leader>n :tabnew<CR>
 map  <C-l> :tabn<CR>
 map  <C-h> :tabp<CR>
 map  <C-n> :tabnew<CR>
@@ -214,20 +194,11 @@ nnoremap <Down>  3<C-w>+
 nnoremap <Left>  3<C-w><
 nnoremap <Right> 3<C-w>>
 
-" Moving lines around
-"nnoremap <A-j> :m .+1<CR>==
-"nnoremap <A-k> :m .-2<CR>==
-"inoremap <A-j> <Esc>:m .+1<CR>==gi
-"inoremap <A-k> <Esc>:m .-2<CR>==gi
-"vnoremap <A-j> :m '>+1<CR>gv=gv
-"vnoremap <A-k> :m '<-2<CR>gv=gv
-
 " "Camel case motion (with shift)
 map <Space>w <Plug>CamelCaseMotion_w
 map <Space>b <Plug>CamelCaseMotion_b
 map <Space>e <Plug>CamelCaseMotion_e
 " }}}
 
-"colorscheme wombat256mod
 colorscheme monokai-mod
 
