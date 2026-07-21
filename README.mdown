@@ -20,3 +20,8 @@ Not a bad idea to install meslo nerd fonts:
 
     brew tap homebrew/cask-fonts
     brew install font-meslo-lg-nerd-font
+
+`config/hunk/config.toml` defines a "Monokai Soda" custom theme for
+[hunk](https://github.com/modem-dev/hunk) that matches the Ghostty terminal
+theme (hunk ships plain Monokai but no Soda variant). It's symlinked to
+`~/.config/hunk/config.toml` by `script/install`.

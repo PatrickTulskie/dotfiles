@@ -49,3 +49,7 @@ ln -s ~/dotfiles/config/ghostty/config ~/.config/ghostty/config
 echo "Link cmux Config"
 mkdir -p ~/.config/cmux
 ln -s ~/dotfiles/config/cmux/settings.json ~/.config/cmux/settings.json
+
+echo "Link hunk Config"
+mkdir -p ~/.config/hunk
+ln -s ~/dotfiles/config/hunk/config.toml ~/.config/hunk/config.toml

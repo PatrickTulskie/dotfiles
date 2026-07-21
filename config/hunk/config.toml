@@ -1,0 +1,73 @@
+# Hunk config — https://github.com/modem-dev/hunk
+#
+# Symlinked to ~/.config/hunk/config.toml by script/install.
+#
+# Hunk ships a plain "Monokai" theme (olive #272822 background) but no Soda
+# variant, so we define one here. `theme = "custom"` activates the
+# [custom_theme] table below. Palette is lifted from Ghostty's own
+# "Monokai Soda" theme so it matches the terminal exactly:
+#
+#   bg #1a1a1a  fg #c4c5b5  selection #343434  comment #625e4c
+#   red #f4005f  green #98e024  orange #fa8419  yellow #e0d561
+#   purple #9d65ff  cyan #58d1eb  bright-white #f6f6ef
+
+theme = "custom"
+
+[custom_theme]
+base  = "monokai"        # built-in syntax base to fall back on
+label = "Monokai Soda"
+
+# --- Surfaces ---------------------------------------------------------------
+background = "#1a1a1a"
+panel      = "#1e1e1e"
+panelAlt   = "#242424"
+border     = "#343434"
+accent     = "#9d65ff"
+accentMuted = "#625e4c"
+text  = "#c4c5b5"
+muted = "#625e4c"
+
+# --- Diff rows --------------------------------------------------------------
+addedBg        = "#1c2a16"   # green-tinted added row
+removedBg      = "#2e1420"   # pink-tinted removed row
+movedAddedBg   = "#16242a"   # distinct tint for moved-in lines
+movedRemovedBg = "#2a1a2e"   # distinct tint for moved-out lines
+contextBg      = "#1a1a1a"
+addedContentBg   = "#263a1c" # stronger highlight on the changed span
+removedContentBg = "#3f1a2c"
+contextContentBg = "#1a1a1a"
+addedSignColor   = "#98e024"
+removedSignColor = "#f4005f"
+lineNumberBg = "#1a1a1a"
+lineNumberFg = "#625e4c"
+selectedHunk = "#2b2b2b"
+
+# --- Badges & file states ---------------------------------------------------
+badgeAdded    = "#98e024"
+badgeRemoved  = "#f4005f"
+badgeNeutral  = "#625e4c"
+fileNew       = "#98e024"
+fileDeleted   = "#f4005f"
+fileRenamed   = "#58d1eb"
+fileModified  = "#e0d561"
+fileUntracked = "#625e4c"
+
+# --- Agent notes ------------------------------------------------------------
+noteBorder          = "#343434"
+noteBackground      = "#202020"
+noteTitleBackground = "#262626"
+noteTitleText       = "#c4c5b5"
+
+# --- Syntax tokens (Soda hues) ----------------------------------------------
+[custom_theme.syntax]
+default     = "#c4c5b5"
+keyword     = "#f4005f"
+string      = "#e0d561"
+comment     = "#625e4c"
+number      = "#9d65ff"
+function    = "#98e024"
+property    = "#c4c5b5"
+type        = "#58d1eb"
+variable    = "#c4c5b5"
+operator    = "#f4005f"
+punctuation = "#c4c5b5"
