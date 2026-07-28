@@ -1,55 +1,164 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "Installing oh-my-zsh"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# Dotfiles installer — safe to re-run on any machine.
+# Symlinks configs into place, backs up anything real it would clobber, and
+# fills in the blanks (oh-my-zsh, vim plugins, fonts) only when missing.
 
-if [ -f ~/.zshrc ]; then
-  mv ~/.zshrc ~/.zshrc.bak
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+OS="$(uname -s)"
+
+echo "==> Installing dotfiles from $REPO_DIR"
+
+# The shell fragments source paths hardcoded to ~/dotfiles, so the repo needs
+# to live there for sourcing to resolve. Warn loudly if it doesn't.
+if [[ "$REPO_DIR" != "$HOME/dotfiles" ]]; then
+  echo ""
+  echo "  WARNING: repo is at $REPO_DIR, but the shell configs source ~/dotfiles."
+  echo "           Move or symlink this repo to ~/dotfiles for everything to load."
+fi
+echo ""
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+# link <source> <target>
+#   - Skips if target is already the correct symlink
+#   - Relinks if it points somewhere stale
+#   - Backs up real files/dirs (timestamped) before symlinking
+link() {
+  local src="$1"
+  local target="$2"
+
+  mkdir -p "$(dirname "$target")"
+
+  if [[ -L "$target" ]]; then
+    local current
+    current="$(readlink "$target")"
+    if [[ "$current" == "$src" ]]; then
+      echo "  [ok]     $target"
+      return
+    fi
+    echo "  [relink] $target  (was -> $current)"
+    rm "$target"
+  elif [[ -e "$target" ]]; then
+    local backup="${target}.backup.$(date +%Y%m%d%H%M%S)"
+    echo "  [backup] $target -> $backup"
+    mv "$target" "$backup"
+  fi
+
+  ln -s "$src" "$target"
+  echo "  [linked] $target -> $src"
+}
+
+# ── Shell config: .zshrc / .profile ───────────────────────────────────────────
+
+echo "==> Shell config"
+link "$REPO_DIR/resources/_zshrc"   "$HOME/.zshrc"
+link "$REPO_DIR/resources/_profile" "$HOME/.profile"
+echo ""
+
+# ── oh-my-zsh ─────────────────────────────────────────────────────────────────
+#
+# _zshrc sets ZSH=$HOME/.ohmyzsh, so install there (not the default ~/.oh-my-zsh).
+# KEEP_ZSHRC=yes leaves our symlinked .zshrc untouched.
+
+echo "==> oh-my-zsh"
+export ZSH="$HOME/.ohmyzsh"
+if [[ -d "$ZSH" ]]; then
+  echo "  [ok]     already installed at $ZSH"
+else
+  echo "  [install] $ZSH"
+  RUNZSH=no KEEP_ZSHRC=yes CHSH=no \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-cp ~/dotfiles/resources/_zshrc ~/.zshrc
-echo "Dropped in .zshrc file"
+# Custom zsh themes
+mkdir -p "$ZSH/custom/themes"
+for theme in "$REPO_DIR"/resources/themes/zsh/*.zsh-theme; do
+  [[ -e "$theme" ]] || continue
+  link "$theme" "$ZSH/custom/themes/$(basename "$theme")"
+done
+echo ""
 
-if [ -f ~/.profile ]; then
-  mv ~/.profile ~/.profile.bak
+# ── vim ───────────────────────────────────────────────────────────────────────
+#
+# ~/.vimrc just does `runtime vimrc`, which loads the repo vimrc symlinked into
+# ~/.vim/. Plugins are managed by Vundle.
+
+echo "==> vim"
+if [[ "$(cat "$HOME/.vimrc" 2>/dev/null || true)" != "runtime vimrc" ]]; then
+  if [[ -e "$HOME/.vimrc" && ! -L "$HOME/.vimrc" ]]; then
+    backup="$HOME/.vimrc.backup.$(date +%Y%m%d%H%M%S)"
+    echo "  [backup] $HOME/.vimrc -> $backup"
+    mv "$HOME/.vimrc" "$backup"
+  fi
+  echo "runtime vimrc" > "$HOME/.vimrc"
+  echo "  [write]  $HOME/.vimrc"
+else
+  echo "  [ok]     $HOME/.vimrc"
 fi
 
-cp ~/dotfiles/resources/_profile ~/.profile
-echo "Dropped in .profile file"
+link "$REPO_DIR/config/vim/vimrc" "$HOME/.vim/vimrc"
 
-cp ~/dotfiles/resources/themes/zsh/*.zsh-theme ~/.ohmyzsh/custom/themes/
-echo "Installed oh-my-zsh themes"
+VUNDLE_DIR="$HOME/.vim/bundle/Vundle.vim"
+if [[ -d "$VUNDLE_DIR" ]]; then
+  echo "  [ok]     Vundle"
+else
+  echo "  [clone]  Vundle"
+  git clone --quiet https://github.com/VundleVim/Vundle.vim.git "$VUNDLE_DIR"
+fi
 
-if [[ "$OS" = "Darwin" ]]; then
-  echo "Installing Fonts"
-  brew install font-meslo-lg-nerd-font
+if command -v vim >/dev/null 2>&1; then
+  echo "  [plugins] vim +PluginInstall"
+  vim +PluginInstall +qall >/dev/null 2>&1 </dev/null || \
+    echo "  [warn]   PluginInstall did not complete cleanly — run ':PluginInstall' in vim"
+else
+  echo "  [skip]   vim not installed — skipping plugin install"
+fi
+echo ""
 
-  echo "Installing Jived terminal theme"
-  open ~/dotfiles/resources/themes/macos-terminal/Jived.terminal
+# ── App configs (symlinked into ~/.config) ────────────────────────────────────
 
-  echo "Setting up iTerm2"
-  defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.dotfiles/config/iterm/"
-  defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+echo "==> App configs"
+link "$REPO_DIR/config/ghostty/config"      "$HOME/.config/ghostty/config"
+link "$REPO_DIR/config/cmux/settings.json"  "$HOME/.config/cmux/settings.json"
+link "$REPO_DIR/config/hunk/config.toml"    "$HOME/.config/hunk/config.toml"
+echo ""
 
-  echo "macOS Specific Config"
+# ── macOS-specific ────────────────────────────────────────────────────────────
+
+if [[ "$OS" == "Darwin" ]]; then
+  echo "==> macOS"
+
+  if command -v brew >/dev/null 2>&1; then
+    if brew list --cask font-meslo-lg-nerd-font >/dev/null 2>&1; then
+      echo "  [ok]     Meslo Nerd Font"
+    else
+      echo "  [install] Meslo Nerd Font"
+      brew install --cask font-meslo-lg-nerd-font
+    fi
+  else
+    echo "  [skip]   Homebrew not found — skipping font install"
+  fi
+
+  # iTerm2: load prefs from the repo
+  if [[ -d "$REPO_DIR/config/iterm" ]]; then
+    defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$REPO_DIR/config/iterm"
+    defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+    echo "  [set]    iTerm2 prefs -> $REPO_DIR/config/iterm"
+  fi
+
+  # Disable press-and-hold so key-repeat works in editors
   defaults write -g ApplePressAndHoldEnabled -bool false
+  echo "  [set]    ApplePressAndHoldEnabled = false"
+
+  # Install the macOS Terminal.app color theme (opens Terminal to import it)
+  TERM_THEME="$REPO_DIR/resources/themes/macos-terminal/Jived.terminal"
+  if [[ -e "$TERM_THEME" ]]; then
+    open "$TERM_THEME"
+    echo "  [open]   Terminal theme: Jived.terminal"
+  fi
+  echo ""
 fi
 
-echo "Setting up vim"
-echo "runtime vimrc" > ~/.vimrc
-mkdir -p ~/.vim/bundle/
-git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-ln -s ~/dotfiles/config/vim/vimrc ~/.vim/vimrc
-vim +PluginInstall
-
-echo "Link Ghostty Config"
-mkdir -p ~/.config/ghostty
-ln -s ~/dotfiles/config/ghostty/config ~/.config/ghostty/config
-
-echo "Link cmux Config"
-mkdir -p ~/.config/cmux
-ln -s ~/dotfiles/config/cmux/settings.json ~/.config/cmux/settings.json
-
-echo "Link hunk Config"
-mkdir -p ~/.config/hunk
-ln -s ~/dotfiles/config/hunk/config.toml ~/.config/hunk/config.toml
+echo "==> Done. Restart your shell (or 'exec zsh') to pick everything up."

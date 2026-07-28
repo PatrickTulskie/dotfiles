@@ -6,7 +6,15 @@ They are mostly for ZSH and Mac, but I use them on Linux too.  I use oh-my-zsh (
 
 ## Installation and Usage
 
-Run `script/install` if you just want to set it up.
+Clone this repo to `~/dotfiles` (the shell configs expect it there), then run
+`script/install`:
+
+    git clone git@github.com:PatrickTulskie/dotfiles.git ~/dotfiles
+    ~/dotfiles/script/install
+
+`script/install` is idempotent and safe to re-run on any machine. It symlinks
+everything into place (backing up anything real it would clobber), installs
+oh-my-zsh and the Meslo Nerd Font if they're missing, and wires up vim/Vundle.
 
 Alternatively, you can clone this repo and then source the files you want in your .zshrc file like so:
 
@@ -15,11 +23,6 @@ Alternatively, you can clone this repo and then source the files you want in you
     done
 
 ## Notes
-
-Not a bad idea to install meslo nerd fonts:
-
-    brew tap homebrew/cask-fonts
-    brew install font-meslo-lg-nerd-font
 
 `config/hunk/config.toml` defines a "Monokai Soda" custom theme for
 [hunk](https://github.com/modem-dev/hunk) that matches the Ghostty terminal
