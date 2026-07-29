@@ -7,6 +7,12 @@ keybind = cmd+opt+right=next_tab
 keybind = cmd+opt+left=previous_tab
 # backspace is ctrl+h
 keybind = backspace=text:\x08
+# cmd+k sends ctrl+l (0x0c) instead of Ghostty's own clear_screen, so it clears
+# the screen inside TUIs that never see Ghostty's action — herdr panes in
+# particular, where herdr forwards the raw byte to the pane's shell.
+keybind = cmd+k=text:\x0c
+# Ghostty's real clear_screen (wipes scrollback too) moves to cmd+shift+k.
+keybind = cmd+shift+k=clear_screen
 
 # Behaviors
 window-inherit-working-directory = false

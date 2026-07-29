@@ -28,3 +28,7 @@ Alternatively, you can clone this repo and then source the files you want in you
 [hunk](https://github.com/modem-dev/hunk) that matches the Ghostty terminal
 theme (hunk ships plain Monokai but no Soda variant). It's symlinked to
 `~/.config/hunk/config.toml` by `script/install`.
+
+cmd+k clears the screen inside herdr panes (and any other TUI) because
+`config/ghostty/config` remaps it to send ctrl+l rather than firing Ghostty's
+own `clear_screen`. Ghostty's scrollback-wiping clear moved to cmd+shift+k.
