@@ -1,0 +1,63 @@
+# Herdr config — https://herdr.dev
+#
+# Symlinked to ~/.config/herdr/config.toml by script/install.
+# Validate with `herdr config check`; apply to a running server with
+# `herdr server reload-config`.
+
+onboarding = false
+
+# ── Theme ─────────────────────────────────────────────────────────────────────
+#
+# Herdr's built-in themes don't include Monokai (Soda or otherwise), but
+# [theme.custom] overrides individual color tokens on top of a base theme.
+# Base is "terminal" so anything Herdr draws that isn't in the token list below
+# falls through to Ghostty's own Monokai Soda ANSI palette instead of a
+# mismatched built-in. The hex values match config/hunk/config.toml.
+#
+# Token names are Catppuccin-flavored (that's Herdr's default theme); the
+# mapping to Soda hues is noted per line. `herdr config check` warns on any
+# token it doesn't recognize, so this list is exhaustive as of herdr 0.7.5.
+
+[theme]
+name = "terminal"
+
+[theme.custom]
+accent      = "#9d65ff"   # purple — highlights, borders, navigate UI
+panel_bg    = "#1a1a1a"   # Soda background
+surface0    = "#1e1e1e"   # sidebar / panel surfaces
+surface1    = "#242424"   # raised surfaces (selected rows)
+surface_dim = "#161616"   # recessed surfaces
+overlay0    = "#343434"   # borders, dividers (Soda selection color)
+overlay1    = "#625e4c"   # dim text (Soda comment color)
+text        = "#c4c5b5"   # Soda foreground
+subtext0    = "#625e4c"   # muted text
+mauve       = "#9d65ff"   # purple
+green       = "#98e024"
+yellow      = "#e0d561"
+red         = "#f4005f"   # Soda's pink-red
+blue        = "#58d1eb"   # Soda has no blue; cyan stands in
+teal        = "#58d1eb"   # cyan
+peach       = "#fa8419"   # orange
+
+# ── Keys ──────────────────────────────────────────────────────────────────────
+#
+# NOTE ON cmd+k: clearing the screen with cmd+k is deliberately NOT configured
+# here — it can't be. Herdr has no "clear screen" action to bind (ctrl+l works
+# because Herdr forwards the raw 0x0c byte to the focused pane's shell, which
+# handles it itself). On top of that, Ghostty binds cmd+k to its own
+# `clear_screen` action, so the keypress never reaches Herdr at all.
+#
+# Both problems are solved in one line on the Ghostty side instead — see
+# config/ghostty/config, which remaps cmd+k to send the ctrl+l byte:
+#
+#     keybind = cmd+k=text:\x0c
+#
+# That works inside Herdr panes, in plain shells, and in any other TUI.
+
+[keys]
+# prefix = "ctrl+b"
+
+# ── UI ────────────────────────────────────────────────────────────────────────
+
+[ui.toast]
+delivery = "system"

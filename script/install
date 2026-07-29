@@ -123,6 +123,7 @@ echo "==> App configs"
 link "$REPO_DIR/config/ghostty/config"      "$HOME/.config/ghostty/config"
 link "$REPO_DIR/config/cmux/settings.json"  "$HOME/.config/cmux/settings.json"
 link "$REPO_DIR/config/hunk/config.toml"    "$HOME/.config/hunk/config.toml"
+link "$REPO_DIR/config/herdr/config.toml"   "$HOME/.config/herdr/config.toml"
 echo ""
 
 # ── macOS-specific ────────────────────────────────────────────────────────────
