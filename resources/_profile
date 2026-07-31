@@ -1,6 +1,3 @@
-# Make terminal delete key compatible with remote servers
-stty erase ^H
-
 ##
 # DELUXE-USR-LOCAL-BIN-INSERT
 # (do not remove this comment)
