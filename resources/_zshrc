@@ -29,15 +29,6 @@ for dotfile in ~/dotfiles/_zsh_*; do
   source ${dotfile}
 done
 
-nvm() {
-  echo "🚨 NVM not loaded! Loading now..."
-  unset -f nvm
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  nvm "$@"
-}
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # zprof # bottom of .zshrc # Uncomment me if you wanna do some profiling
