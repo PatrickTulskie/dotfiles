@@ -1,0 +1,7 @@
+# Atuin runs local-only here: no account, no sync, no network. `update_check`
+# is the one remaining outbound call, so it's off too.
+update_check = false
+
+# Keep the search UI to a strip at the bottom rather than taking over the
+# terminal, which is closer to how ctrl+r behaved before.
+inline_height = 20
