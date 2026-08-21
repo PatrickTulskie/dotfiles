@@ -32,6 +32,15 @@ theme (hunk ships plain Monokai but no Soda variant). It's symlinked to
 `config/herdr/config.toml` does the same for [herdr](https://herdr.dev) via its
 `[theme.custom]` token overrides, using the same palette.
 
+`_zshrc` binds ctrl+r to [atuin](https://atuin.sh) via `--disable-up-arrow`, so
+history search is atuin's but up-arrow stays zsh's. The binary comes from
+Homebrew (see the `iac` repo); the hook is guarded on `command -v atuin`, so a
+box without it just falls back to zsh's own ctrl+r. `config/atuin/config.toml`
+keeps it local-only — no account, no sync, no network.
+
+fzf is deliberately *not* wired into the shell. It's installed for vim's
+`<C-P>` (`:FZF`), which only needs the binary on PATH, and atuin owns ctrl+r.
+
 cmd+k clears the screen inside herdr panes (and any other TUI) because
 `config/ghostty/config` remaps it to send ctrl+l rather than firing Ghostty's
 own `clear_screen`. Ghostty's scrollback-wiping clear moved to cmd+shift+k.
