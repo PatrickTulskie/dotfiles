@@ -35,4 +35,8 @@ for dotfile in ~/dotfiles/_zsh_*; do
   source ${dotfile}
 done
 
+# Atuin owns ctrl+r. Up-arrow deliberately stays on zsh's own history, so
+# --disable-up-arrow is load-bearing here, not decoration.
+command -v atuin >/dev/null && eval "$(atuin init zsh --disable-up-arrow)"
+
 # zprof # bottom of .zshrc # Uncomment me if you wanna do some profiling
