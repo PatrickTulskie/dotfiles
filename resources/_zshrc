@@ -35,6 +35,4 @@ for dotfile in ~/dotfiles/_zsh_*; do
   source ${dotfile}
 done
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # zprof # bottom of .zshrc # Uncomment me if you wanna do some profiling
