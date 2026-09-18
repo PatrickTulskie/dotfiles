@@ -23,6 +23,7 @@ command -v pay-respects >/dev/null && eval "$(pay-respects zsh --alias fuck)"
 
 command -v mise >/dev/null && eval "$(mise activate zsh)"
 command -v direnv >/dev/null && eval "$(direnv hook zsh)"
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
 # >>> guise >>>
 [ -f "$HOME/.config/guise/hook.sh" ] && . "$HOME/.config/guise/hook.sh"
