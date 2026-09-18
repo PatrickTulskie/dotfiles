@@ -17,6 +17,17 @@ everything into place (backing up anything real it would clobber), installs
 oh-my-zsh, vim-plug and the Meslo Nerd Font if they're missing, and seeds
 Rectangle's prefs on a machine that has none yet.
 
+`~/.zshrc` and `~/.gitconfig` are the two files other tools like to edit in
+place (guise, ltv-agent), so the installer asks how to wire each one:
+
+* **Symlink** — the repo file itself. Edits by those tools land in the repo.
+* **Stub** — a real file whose first lines load the repo copy. Tools append
+  below and the repo stays clean. An existing file keeps its contents.
+* **Leave it** — hands off.
+
+It only asks when the file isn't already wired one of those ways, and
+`DOTFILES_RC_MODE=link|stub|skip` answers for both without a prompt.
+
 A machine that was on the old layout (`resources/_zshrc`, `_universal_*`,
 Vundle, thefuck) should run `script/migrate` once instead. It clears out what
 the installer doesn't know about, swaps thefuck for pay-respects, then runs
@@ -29,6 +40,7 @@ the installer doesn't know about, swaps thefuck for pay-respects, then runs
     zsh/env.zsh       exports
     zsh/aliases.zsh   aliases
     zsh/linux.zsh     Linux-only bits
+    script/           install, migrate, and the terminal UI they share
     bin/              scripts, on PATH via path.zsh
     config/           app configs symlinked into ~/.config (git, ghostty, ...)
     private/_*        gitignored; anything matching is sourced after the rest

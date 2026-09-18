@@ -8,26 +8,52 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OS="$(uname -s)"
 
-echo "==> Installing dotfiles from $REPO_DIR"
+source "$REPO_DIR/script/lib/ui.sh"
+ui_init
+
+ui_intro "dotfiles" "Let's get this machine set up" \
+  "Links this repo into place. Anything real that's in the way is backed" \
+  "up first, and it's safe to run again anytime."
 
 # The shell fragments source paths hardcoded to ~/dotfiles, so the repo needs
-# to live there for sourcing to resolve. Warn loudly if it doesn't.
+# to live there for sourcing to resolve.
 if [[ "$REPO_DIR" != "$HOME/dotfiles" ]]; then
-  echo ""
-  echo "  WARNING: repo is at $REPO_DIR, but the shell configs source ~/dotfiles."
-  echo "           Move or symlink this repo to ~/dotfiles for everything to load."
+  ui_bar
+  ui_warn "Repo is at $(ui_path "$REPO_DIR"), but the shell config sources ~/dotfiles"
+  ui_note "Move or symlink it to ~/dotfiles for everything to load."
 fi
-echo ""
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
+LINKED_OK=0
+LINKED_NEW=0
+
+# section [title]
+# - Summarizes the previous section's links before starting the next one
+section() {
+  if [[ $LINKED_NEW -gt 0 && $LINKED_OK -gt 0 ]]; then
+    ui_ok "Linked $LINKED_NEW ${UI_DIM}· $LINKED_OK already in place${UI_OFF}"
+  elif [[ $LINKED_NEW -gt 0 ]]; then
+    ui_ok "Linked $LINKED_NEW"
+  elif [[ $LINKED_OK -gt 0 ]]; then
+    ui_note "✓ $LINKED_OK already in place"
+  fi
+  LINKED_OK=0 LINKED_NEW=0
+  [[ $# -eq 0 ]] || ui_section "$1"
+}
+
+backup() {
+  local target="$1" backup="${1}.backup.$(date +%Y%m%d%H%M%S)"
+  mv "$target" "$backup"
+  ui_warn "Backed up $(ui_path "$target") to $(ui_path "$backup")"
+}
+
 # link <source> <target>
-#   - Skips if target is already the correct symlink
-#   - Relinks if it points somewhere stale
-#   - Backs up real files/dirs (timestamped) before symlinking
+# - Skips if target is already the correct symlink
+# - Relinks if it points somewhere stale
+# - Backs up real files/dirs before symlinking
 link() {
-  local src="$1"
-  local target="$2"
+  local src="$1" target="$2"
 
   mkdir -p "$(dirname "$target")"
 
@@ -35,130 +61,167 @@ link() {
     local current
     current="$(readlink "$target")"
     if [[ "$current" == "$src" ]]; then
-      echo "  [ok]     $target"
+      LINKED_OK=$((LINKED_OK + 1))
       return
     fi
-    echo "  [relink] $target  (was -> $current)"
+    ui_bar "${UI_CYAN}↻${UI_OFF} $(ui_path "$target") ${UI_DIM}(was → $(ui_path "$current"))${UI_OFF}"
     rm "$target"
   elif [[ -e "$target" ]]; then
-    local backup="${target}.backup.$(date +%Y%m%d%H%M%S)"
-    echo "  [backup] $target -> $backup"
-    mv "$target" "$backup"
+    backup "$target"
   fi
 
   ln -s "$src" "$target"
-  echo "  [linked] $target -> $src"
+  LINKED_NEW=$((LINKED_NEW + 1))
 }
 
-# ── Shell config ──────────────────────────────────────────────────────────────
+# managed <source> <target> <stub text>
+#
+# For the two files other tools like to edit in place (guise, ltv-agent and
+# friends append blocks to ~/.zshrc and ~/.gitconfig). Three ways to wire one:
+#   link  the symlink; edits by those tools land in the repo
+#   stub  a real file whose first lines load the repo copy; tools append below
+#   skip  leave it alone
+# Set DOTFILES_RC_MODE=link|stub|skip to answer without a prompt.
+managed() {
+  local src="$1" target="$2" stub="$3" mode="${DOTFILES_RC_MODE:-}"
 
-echo "==> Shell config"
-link "$REPO_DIR/zsh/zshrc" "$HOME/.zshrc"
-echo ""
+  if [[ -L "$target" && "$(readlink "$target")" == "$src" ]]; then
+    ui_note "✓ $(ui_path "$target") is linked"
+    return
+  fi
+  if [[ -f "$target" && ! -L "$target" ]] && grep -qF "$src" "$target"; then
+    ui_note "✓ $(ui_path "$target") is a stub that loads the repo copy"
+    return
+  fi
+
+  if [[ -z "$mode" ]]; then
+    if [[ -e "$target" && ! -L "$target" ]]; then mode=stub; else mode=link; fi
+    ui_select mode "How should $(ui_path "$target") be managed?" \
+      link "Symlink"  "the repo file itself; tools that edit it write into the repo" \
+      stub "Stub"     "a real file that loads the repo copy; tools can append to it" \
+      skip "Leave it" "don't touch $(ui_path "$target")"
+  fi
+
+  case "$mode" in
+    link)
+      link "$src" "$target"
+      ;;
+    stub)
+      mkdir -p "$(dirname "$target")"
+      if [[ -L "$target" ]]; then
+        ui_bar "${UI_CYAN}↻${UI_OFF} $(ui_path "$target") ${UI_DIM}(was → $(ui_path "$(readlink "$target")"))${UI_OFF}"
+        rm "$target"
+      fi
+      if [[ -f "$target" ]]; then
+        { printf '%s\n\n' "$stub"; cat "$target"; } > "$target.tmp" && mv "$target.tmp" "$target"
+        ui_ok "Prepended the repo loader to $(ui_path "$target"); the rest is untouched"
+      else
+        printf '%s\n' "$stub" > "$target"
+        ui_ok "Wrote $(ui_path "$target") as a stub"
+      fi
+      ;;
+    skip)
+      ui_note "Left $(ui_path "$target") alone"
+      ;;
+    *)
+      ui_abort "DOTFILES_RC_MODE must be link, stub or skip (got '$mode')"
+      ;;
+  esac
+}
+
+# ── Shell ─────────────────────────────────────────────────────────────────────
+
+section "Shell"
+managed "$REPO_DIR/zsh/zshrc" "$HOME/.zshrc" "source \"$REPO_DIR/zsh/zshrc\""
 
 # ── git ───────────────────────────────────────────────────────────────────────
 #
 # ~/.config/git/ignore is git's default global excludes path, so no
 # core.excludesfile is needed.
 
-echo "==> git"
-link "$REPO_DIR/config/git/config" "$HOME/.gitconfig"
+section "git"
+managed "$REPO_DIR/config/git/config" "$HOME/.gitconfig" "$(printf '[include]\n\tpath = %s/config/git/config' "$REPO_DIR")"
 link "$REPO_DIR/config/git/ignore" "$HOME/.config/git/ignore"
-echo ""
 
 # ── oh-my-zsh ─────────────────────────────────────────────────────────────────
 #
-# Installs to the default ~/.oh-my-zsh, matching ZSH=$HOME/.oh-my-zsh in zsh/zshrc.
-# KEEP_ZSHRC=yes leaves our symlinked .zshrc untouched.
+# Installs to the default ~/.oh-my-zsh, matching ZSH=$HOME/.oh-my-zsh in
+# zsh/zshrc. KEEP_ZSHRC=yes leaves our .zshrc untouched.
 
-echo "==> oh-my-zsh"
+section "oh-my-zsh"
 export ZSH="$HOME/.oh-my-zsh"
 if [[ -d "$ZSH" ]]; then
-  echo "  [ok]     already installed at $ZSH"
+  ui_note "✓ installed at $(ui_path "$ZSH")"
 else
-  echo "  [install] $ZSH"
+  ui_bar "${UI_CYAN}↓${UI_OFF} installing to $(ui_path "$ZSH")"
   RUNZSH=no KEEP_ZSHRC=yes CHSH=no \
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended >/dev/null
 fi
 
-# Custom zsh themes
 mkdir -p "$ZSH/custom/themes"
 for theme in "$REPO_DIR"/resources/themes/zsh/*.zsh-theme; do
   [[ -e "$theme" ]] || continue
   link "$theme" "$ZSH/custom/themes/$(basename "$theme")"
 done
-echo ""
 
 # ── vim ───────────────────────────────────────────────────────────────────────
 #
 # ~/.vimrc just does `runtime vimrc`, which loads the repo vimrc symlinked into
 # ~/.vim/. Plugins are managed by vim-plug.
 
-echo "==> vim"
+section "vim"
 if [[ "$(cat "$HOME/.vimrc" 2>/dev/null || true)" != "runtime vimrc" ]]; then
-  if [[ -e "$HOME/.vimrc" && ! -L "$HOME/.vimrc" ]]; then
-    backup="$HOME/.vimrc.backup.$(date +%Y%m%d%H%M%S)"
-    echo "  [backup] $HOME/.vimrc -> $backup"
-    mv "$HOME/.vimrc" "$backup"
-  fi
+  [[ ! -e "$HOME/.vimrc" || -L "$HOME/.vimrc" ]] || backup "$HOME/.vimrc"
   echo "runtime vimrc" > "$HOME/.vimrc"
-  echo "  [write]  $HOME/.vimrc"
-else
-  echo "  [ok]     $HOME/.vimrc"
+  ui_ok "Wrote $(ui_path "$HOME/.vimrc")"
 fi
 
 link "$REPO_DIR/config/vim/vimrc" "$HOME/.vim/vimrc"
 
 PLUG="$HOME/.vim/autoload/plug.vim"
-if [[ -f "$PLUG" ]]; then
-  echo "  [ok]     vim-plug"
-else
-  echo "  [fetch]  vim-plug"
+if [[ ! -f "$PLUG" ]]; then
+  ui_bar "${UI_CYAN}↓${UI_OFF} fetching vim-plug"
   curl -fsSLo "$PLUG" --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
 if command -v vim >/dev/null 2>&1; then
-  echo "  [plugins] vim +PlugInstall"
   vim -es -u "$HOME/.vimrc" -c PlugInstall -c qall >/dev/null 2>&1 </dev/null || true
   # vim's exit code is unreliable here (a first run errors on the colorscheme
   # before the plugin exists), so judge by what actually landed on disk.
   want="$(grep -c "^Plug '" "$REPO_DIR/config/vim/vimrc")"
   have="$(ls "$HOME/.vim/plugged" 2>/dev/null | wc -l | tr -d ' ')"
   if [[ "$have" -ge "$want" ]]; then
-    echo "  [ok]     $have plugins installed"
+    ui_note "✓ $have plugins installed"
   else
-    echo "  [warn]   only $have of $want plugins installed — run ':PlugInstall' in vim"
+    ui_warn "Only $have of $want plugins installed — run :PlugInstall in vim"
   fi
 else
-  echo "  [skip]   vim not installed — skipping plugin install"
+  ui_note "vim not installed; skipping plugins"
 fi
-echo ""
 
 # ── App configs (symlinked into ~/.config) ────────────────────────────────────
 
-echo "==> App configs"
+section "App configs"
+ui_note "ghostty · cmux · hunk · herdr · atuin"
 link "$REPO_DIR/config/ghostty/config"      "$HOME/.config/ghostty/config"
 link "$REPO_DIR/config/cmux/settings.json"  "$HOME/.config/cmux/settings.json"
 link "$REPO_DIR/config/hunk/config.toml"    "$HOME/.config/hunk/config.toml"
 link "$REPO_DIR/config/herdr/config.toml"   "$HOME/.config/herdr/config.toml"
 link "$REPO_DIR/config/atuin/config.toml"   "$HOME/.config/atuin/config.toml"
-echo ""
 
 # ── macOS-specific ────────────────────────────────────────────────────────────
 
 if [[ "$OS" == "Darwin" ]]; then
-  echo "==> macOS"
+  section "macOS"
 
-  if command -v brew >/dev/null 2>&1; then
-    if brew list --cask font-meslo-lg-nerd-font >/dev/null 2>&1; then
-      echo "  [ok]     Meslo Nerd Font"
-    else
-      echo "  [install] Meslo Nerd Font"
-      brew install --cask font-meslo-lg-nerd-font
-    fi
+  if ! command -v brew >/dev/null 2>&1; then
+    ui_note "Homebrew not found; skipping the font"
+  elif brew list --cask font-meslo-lg-nerd-font >/dev/null 2>&1; then
+    ui_note "✓ Meslo Nerd Font"
   else
-    echo "  [skip]   Homebrew not found — skipping font install"
+    ui_bar "${UI_CYAN}↓${UI_OFF} installing Meslo Nerd Font"
+    brew install --quiet --cask font-meslo-lg-nerd-font
   fi
 
   # Rectangle: RectangleConfig.json is Rectangle's own export format. Turn it
@@ -166,7 +229,7 @@ if [[ "$OS" == "Darwin" ]]; then
   # once Rectangle has prefs, its own settings UI is the source of truth.
   RECT_CONFIG="$REPO_DIR/config/rectangle/RectangleConfig.json"
   if defaults read com.knollsoft.Rectangle >/dev/null 2>&1; then
-    echo "  [ok]     Rectangle prefs already present"
+    ui_note "✓ Rectangle prefs already present"
   elif [[ -e "$RECT_CONFIG" ]]; then
     python3 - "$RECT_CONFIG" <<'PY' | defaults import com.knollsoft.Rectangle -
 import json, plistlib, sys
@@ -175,13 +238,13 @@ prefs = {k: next(iter(v.values())) for k, v in cfg["defaults"].items() if v}
 prefs.update(cfg["shortcuts"])
 plistlib.dump(prefs, sys.stdout.buffer)
 PY
-    echo "  [set]    Rectangle prefs (restart Rectangle to apply)"
+    ui_ok "Seeded Rectangle prefs ${UI_DIM}(restart Rectangle to apply)${UI_OFF}"
   fi
 
   # Disable press-and-hold so key-repeat works in editors
   defaults write -g ApplePressAndHoldEnabled -bool false
-  echo "  [set]    ApplePressAndHoldEnabled = false"
-  echo ""
+  ui_note "✓ key repeat instead of press-and-hold"
 fi
 
-echo "==> Done. Restart your shell (or 'exec zsh') to pick everything up."
+section
+ui_outro "All set. Open a new shell (or ${UI_BOLD}exec zsh${UI_OFF}) to pick it up."

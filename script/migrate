@@ -7,39 +7,43 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-echo "==> Migrating $HOME to the current dotfiles layout"
-echo ""
+source "$REPO_DIR/script/lib/ui.sh"
+ui_init
+
+ui_intro "dotfiles" "Migrating from the old layout" \
+  "Clears out what the old install left behind, then hands off to the" \
+  "installer. Anything local it won't delete on its own gets printed."
 
 # ── Dangling links from the old layout ────────────────────────────────────────
 
-echo "==> Old symlinks"
+ui_section "Old symlinks"
+removed=0
 for target in "$HOME/.profile" "$HOME/.oh-my-zsh/custom/themes/jived_server.zsh-theme"; do
   if [[ -L "$target" && "$(readlink "$target")" == "$REPO_DIR"/* ]]; then
     rm "$target"
-    echo "  [rm]     $target"
-  else
-    echo "  [ok]     $target"
+    ui_ok "Removed $(ui_path "$target")"
+    removed=$((removed + 1))
   fi
 done
-echo ""
+[[ $removed -gt 0 ]] || ui_note "✓ nothing to remove"
 
 # ── git: ~/.gitignore and a real ~/.gitconfig ─────────────────────────────────
 #
 # Both move into the repo. Anything local that the repo doesn't already have is
 # printed so it can be carried over by hand, and the local file is left alone.
 
-echo "==> git"
+ui_section "git"
 if [[ -f "$HOME/.gitignore" && ! -L "$HOME/.gitignore" ]]; then
   extra="$(grep -vxF -f "$REPO_DIR/config/git/ignore" "$HOME/.gitignore" | grep -v '^\s*$' || true)"
   if [[ -z "$extra" ]]; then
     rm "$HOME/.gitignore"
-    echo "  [rm]     $HOME/.gitignore (fully covered by config/git/ignore)"
+    ui_ok "Removed $(ui_path "$HOME/.gitignore") ${UI_DIM}(fully covered by config/git/ignore)${UI_OFF}"
   else
-    echo "  [keep]   $HOME/.gitignore has entries not in config/git/ignore:"
-    echo "$extra" | sed 's/^/             /'
+    ui_warn "Kept $(ui_path "$HOME/.gitignore"); it has entries config/git/ignore lacks:"
+    while IFS= read -r line; do ui_note "    $line"; done <<< "$extra"
   fi
 else
-  echo "  [ok]     $HOME/.gitignore"
+  ui_note "✓ no stray ~/.gitignore"
 fi
 
 GITCONFIG_EXTRA=""
@@ -47,68 +51,71 @@ if [[ -f "$HOME/.gitconfig" && ! -L "$HOME/.gitconfig" ]]; then
   GITCONFIG_EXTRA="$(comm -23 \
     <(git config --file "$HOME/.gitconfig" --list | grep -v '^core.excludesfile=' | sort) \
     <(git config --file "$REPO_DIR/config/git/config" --list | sort))"
+  ui_note "~/.gitconfig is a real file; the installer will ask what to do with it"
 fi
-echo ""
 
 # ── Shell leftovers ───────────────────────────────────────────────────────────
 
-echo "==> Shell"
+ui_section "Shell"
 if [[ -f "$HOME/.zprofile" ]]; then
   # Only auto-delete when every line is one of the known PATH duplicates.
   if grep -vE '^\s*(#|$)|\.docker/bin|brew shellenv|\.local/bin' "$HOME/.zprofile" >/dev/null; then
-    echo "  [keep]   $HOME/.zprofile has lines beyond the usual PATH duplicates; review it:"
-    sed 's/^/             /' "$HOME/.zprofile"
+    ui_warn "Kept $(ui_path "$HOME/.zprofile"); it has more than the usual PATH duplicates:"
+    while IFS= read -r line; do ui_note "    $line"; done < "$HOME/.zprofile"
   else
     rm "$HOME/.zprofile"
-    echo "  [rm]     $HOME/.zprofile (only duplicated PATH setup)"
+    ui_ok "Removed $(ui_path "$HOME/.zprofile") ${UI_DIM}(only duplicated PATH setup)${UI_OFF}"
   fi
 else
-  echo "  [ok]     no ~/.zprofile"
+  ui_note "✓ no ~/.zprofile"
 fi
 
 if [[ -d "$HOME/.vim/bundle" ]]; then
   rm -rf "$HOME/.vim/bundle"
-  echo "  [rm]     $HOME/.vim/bundle (Vundle)"
+  ui_ok "Removed $(ui_path "$HOME/.vim/bundle") ${UI_DIM}(Vundle)${UI_OFF}"
 else
-  echo "  [ok]     no Vundle dir"
+  ui_note "✓ no Vundle dir"
 fi
-echo ""
 
 # ── thefuck -> pay-respects ───────────────────────────────────────────────────
 
-echo "==> pay-respects"
+ui_section "pay-respects"
 if command -v brew >/dev/null 2>&1; then
   if brew list --formula thefuck >/dev/null 2>&1; then
     brew uninstall --quiet thefuck
-    echo "  [rm]     thefuck"
+    ui_ok "Uninstalled thefuck"
   fi
   if command -v pay-respects >/dev/null 2>&1; then
-    echo "  [ok]     pay-respects"
+    ui_note "✓ pay-respects"
   else
-    echo "  [install] pay-respects"
+    ui_bar "${UI_CYAN}↓${UI_OFF} installing pay-respects"
     brew install --quiet timescam/homebrew-tap/pay-respects
   fi
 elif command -v pay-respects >/dev/null 2>&1; then
-  echo "  [ok]     pay-respects"
+  ui_note "✓ pay-respects"
 else
-  echo "  [skip]   no Homebrew; install with: cargo install pay-respects"
+  ui_warn "No Homebrew; install by hand with: cargo install pay-respects"
 fi
-echo ""
+
+ui_outro "Handing off to the installer."
 
 # ── Hand off to the regular installer ─────────────────────────────────────────
 
 "$REPO_DIR/script/install"
 
-# The installer backs up a real ~/.gitconfig before linking. Drop that backup
-# when it held nothing the repo doesn't, otherwise say what to carry over.
-if [[ -n "${GITCONFIG_EXTRA}" ]]; then
-  echo "==> Your old ~/.gitconfig had settings not in config/git/config."
-  echo "    They're in the .gitconfig.backup.* file above; carry these over by hand:"
-  echo "$GITCONFIG_EXTRA" | sed 's/^/      /'
-else
+# If the installer backed up a real ~/.gitconfig, drop the backup when it held
+# nothing the repo doesn't, otherwise say what to carry over.
+if [[ -n "${GITCONFIG_EXTRA}" && -L "$HOME/.gitconfig" ]]; then
+  ui_intro "dotfiles" "One more thing" \
+    "Your old ~/.gitconfig had settings config/git/config lacks. They're in the" \
+    ".gitconfig.backup.* file above; carry these over by hand:"
+  ui_bar
+  while IFS= read -r line; do ui_note "    $line"; done <<< "$GITCONFIG_EXTRA"
+  ui_outro "Then delete the backup."
+elif [[ -L "$HOME/.gitconfig" ]]; then
   for backup in "$HOME"/.gitconfig.backup.*; do
     [[ -e "$backup" ]] || continue
     rm "$backup"
-    echo "==> Removed $backup (nothing in it the repo lacks)"
+    ui_line "${UI_GREEN}◇${UI_OFF}  Removed $(ui_path "$backup") ${UI_DIM}· nothing in it the repo lacks${UI_OFF}"
   done
 fi
