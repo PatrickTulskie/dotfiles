@@ -22,6 +22,8 @@ done
 # --disable-up-arrow is load-bearing here, not decoration.
 command -v atuin >/dev/null && eval "$(atuin init zsh --disable-up-arrow)"
 
+command -v pay-respects >/dev/null && eval "$(pay-respects zsh --alias fuck)"
+
 # >>> guise >>>
 [ -f "$HOME/.config/guise/hook.sh" ] && . "$HOME/.config/guise/hook.sh"
 # <<< guise <<<
