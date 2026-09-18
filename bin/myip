@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec curl -4 -s https://icanhazip.com

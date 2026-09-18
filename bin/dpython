@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Usage: dpython [tag]   Drops into a python container with the cwd mounted (default tag: slim)
+set -euo pipefail
+exec docker run -it --rm --network host \
+  --name "$(basename "$PWD")-$(date +%s)" \
+  --mount "src=$PWD,target=/usr/src/myapp,type=bind" \
+  -w /usr/src/myapp "python:${1:-slim}" bash
