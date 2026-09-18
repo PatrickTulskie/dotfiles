@@ -14,29 +14,44 @@ Clone this repo to `~/dotfiles` (the shell configs expect it there), then run
 
 `script/install` is idempotent and safe to re-run on any machine. It symlinks
 everything into place (backing up anything real it would clobber), installs
-oh-my-zsh and the Meslo Nerd Font if they're missing, and wires up vim/Vundle.
+oh-my-zsh, vim-plug and the Meslo Nerd Font if they're missing, and seeds
+Rectangle's prefs on a machine that has none yet.
 
-Alternatively, you can clone this repo and then source the files you want in your .zshrc file like so:
+## Layout
 
-    for dotfile in ~/dotfiles/_zsh_*; do
-      source ${dotfile}
-    done
+    zsh/zshrc         symlinked to ~/.zshrc
+    zsh/path.zsh      the only place PATH is assembled
+    zsh/env.zsh       exports
+    zsh/aliases.zsh   aliases
+    zsh/linux.zsh     Linux-only bits
+    bin/              scripts, on PATH via path.zsh
+    config/           app configs symlinked into ~/.config (git, ghostty, ...)
+    private/_*        gitignored; anything matching is sourced after the rest
+
+If you'd rather not run the installer, source `zsh/path.zsh` before oh-my-zsh
+and the other `zsh/*.zsh` files after it, as `zsh/zshrc` does.
 
 ## Notes
 
+`config/git/config` is linked to `~/.gitconfig`, so `git config --global`
+writes land in the repo. `config/git/ignore` goes to `~/.config/git/ignore`,
+git's default global excludes path.
+
 `config/hunk/config.toml` defines a "Monokai Soda" custom theme for
 [hunk](https://github.com/modem-dev/hunk) that matches the Ghostty terminal
-theme (hunk ships plain Monokai but no Soda variant). It's symlinked to
-`~/.config/hunk/config.toml` by `script/install`.
+theme (hunk ships plain Monokai but no Soda variant).
 
 `config/herdr/config.toml` does the same for [herdr](https://herdr.dev) via its
 `[theme.custom]` token overrides, using the same palette.
 
-`_zshrc` binds ctrl+r to [atuin](https://atuin.sh) via `--disable-up-arrow`, so
-history search is atuin's but up-arrow stays zsh's. The binary comes from
+`zsh/zshrc` binds ctrl+r to [atuin](https://atuin.sh) via `--disable-up-arrow`,
+so history search is atuin's but up-arrow stays zsh's. The binary comes from
 Homebrew (see the `iac` repo); the hook is guarded on `command -v atuin`, so a
 box without it just falls back to zsh's own ctrl+r. `config/atuin/config.toml`
 keeps it local-only — no account, no sync, no network.
+
+`fuck` is [pay-respects](https://github.com/iffse/pay-respects), also from
+Homebrew and also guarded, so it's simply absent where it isn't installed.
 
 fzf is deliberately *not* wired into the shell. It's installed for vim's
 `<C-P>` (`:FZF`), which only needs the binary on PATH, and atuin owns ctrl+r.
@@ -44,3 +59,9 @@ fzf is deliberately *not* wired into the shell. It's installed for vim's
 cmd+k clears the screen inside herdr panes (and any other TUI) because
 `config/ghostty/config` remaps it to send ctrl+l rather than firing Ghostty's
 own `clear_screen`. Ghostty's scrollback-wiping clear moved to cmd+shift+k.
+
+`config/rectangle/RectangleConfig.json` only seeds a fresh machine. To update
+it, export from Rectangle's settings and overwrite the file.
+
+`config/iterm` and `resources/themes/macos-terminal` are kept for reference but
+nothing installs them; Ghostty is the terminal.
