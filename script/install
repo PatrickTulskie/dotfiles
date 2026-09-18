@@ -152,23 +152,26 @@ if [[ "$OS" == "Darwin" ]]; then
     echo "  [skip]   Homebrew not found — skipping font install"
   fi
 
-  # iTerm2: load prefs from the repo
-  if [[ -d "$REPO_DIR/config/iterm" ]]; then
-    defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$REPO_DIR/config/iterm"
-    defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
-    echo "  [set]    iTerm2 prefs -> $REPO_DIR/config/iterm"
+  # Rectangle: RectangleConfig.json is Rectangle's own export format. Turn it
+  # into a plist and hand it to `defaults import`. Only seeds a fresh machine;
+  # once Rectangle has prefs, its own settings UI is the source of truth.
+  RECT_CONFIG="$REPO_DIR/config/rectangle/RectangleConfig.json"
+  if defaults read com.knollsoft.Rectangle >/dev/null 2>&1; then
+    echo "  [ok]     Rectangle prefs already present"
+  elif [[ -e "$RECT_CONFIG" ]]; then
+    python3 - "$RECT_CONFIG" <<'PY' | defaults import com.knollsoft.Rectangle -
+import json, plistlib, sys
+cfg = json.load(open(sys.argv[1]))
+prefs = {k: next(iter(v.values())) for k, v in cfg["defaults"].items() if v}
+prefs.update(cfg["shortcuts"])
+plistlib.dump(prefs, sys.stdout.buffer)
+PY
+    echo "  [set]    Rectangle prefs (restart Rectangle to apply)"
   fi
 
   # Disable press-and-hold so key-repeat works in editors
   defaults write -g ApplePressAndHoldEnabled -bool false
   echo "  [set]    ApplePressAndHoldEnabled = false"
-
-  # Install the macOS Terminal.app color theme (opens Terminal to import it)
-  TERM_THEME="$REPO_DIR/resources/themes/macos-terminal/Jived.terminal"
-  if [[ -e "$TERM_THEME" ]]; then
-    open "$TERM_THEME"
-    echo "  [open]   Terminal theme: Jived.terminal"
-  fi
   echo ""
 fi
 
