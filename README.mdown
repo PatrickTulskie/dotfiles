@@ -70,6 +70,10 @@ keeps it local-only — no account, no sync, no network.
 `fuck` is [pay-respects](https://github.com/iffse/pay-respects), also from
 Homebrew and also guarded, so it's simply absent where it isn't installed.
 
+[mise](https://mise.jdx.dev), [direnv](https://direnv.net) and
+[zoxide](https://github.com/ajeetdsouza/zoxide) (`z`, `zi`) are hooked in the
+same way, straight from the binaries rather than through oh-my-zsh plugins.
+
 fzf is deliberately *not* wired into the shell. It's installed for vim's
 `<C-P>` (`:FZF`), which only needs the binary on PATH, and atuin owns ctrl+r.
 
