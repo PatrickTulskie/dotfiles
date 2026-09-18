@@ -92,7 +92,7 @@ echo ""
 # ── vim ───────────────────────────────────────────────────────────────────────
 #
 # ~/.vimrc just does `runtime vimrc`, which loads the repo vimrc symlinked into
-# ~/.vim/. Plugins are managed by Vundle.
+# ~/.vim/. Plugins are managed by vim-plug.
 
 echo "==> vim"
 if [[ "$(cat "$HOME/.vimrc" 2>/dev/null || true)" != "runtime vimrc" ]]; then
@@ -109,18 +109,19 @@ fi
 
 link "$REPO_DIR/config/vim/vimrc" "$HOME/.vim/vimrc"
 
-VUNDLE_DIR="$HOME/.vim/bundle/Vundle.vim"
-if [[ -d "$VUNDLE_DIR" ]]; then
-  echo "  [ok]     Vundle"
+PLUG="$HOME/.vim/autoload/plug.vim"
+if [[ -f "$PLUG" ]]; then
+  echo "  [ok]     vim-plug"
 else
-  echo "  [clone]  Vundle"
-  git clone --quiet https://github.com/VundleVim/Vundle.vim.git "$VUNDLE_DIR"
+  echo "  [fetch]  vim-plug"
+  curl -fsSLo "$PLUG" --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
 if command -v vim >/dev/null 2>&1; then
-  echo "  [plugins] vim +PluginInstall"
-  vim +PluginInstall +qall >/dev/null 2>&1 </dev/null || \
-    echo "  [warn]   PluginInstall did not complete cleanly — run ':PluginInstall' in vim"
+  echo "  [plugins] vim +PlugInstall"
+  vim -es -u "$HOME/.vimrc" -c PlugInstall -c qall >/dev/null 2>&1 </dev/null || \
+    echo "  [warn]   PlugInstall did not complete cleanly — run ':PlugInstall' in vim"
 else
   echo "  [skip]   vim not installed — skipping plugin install"
 fi

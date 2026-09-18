@@ -1,49 +1,31 @@
-" Vundle {{{
+" Plugins {{{
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
+call plug#begin()
 
-Plugin 'scrooloose/nerdtree'
-Plugin 'bling/vim-airline'
-Plugin 'bkad/CamelCaseMotion'
-Plugin 'tpope/vim-fugitive'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-commentary'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'tpope/vim-surround'
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
-Plugin 'gcmt/wildfire.vim'
-Plugin 'Yggdroot/indentLine'
-"dockerfile
-Plugin 'ekalinin/Dockerfile.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'bling/vim-airline'
+Plug 'bkad/CamelCaseMotion'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-commentary'
+Plug 'jiangmiao/auto-pairs'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'tpope/vim-surround'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'gcmt/wildfire.vim'
+Plug 'Yggdroot/indentLine'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-rails'
+Plug 'rust-lang/rust.vim'
+Plug 'fatih/vim-go'
+Plug 'tpope/vim-sleuth'
+Plug 'pangloss/vim-javascript'
+Plug 'ap/vim-css-color'
+Plug 'patricktulskie/monokai-mod.vim'
 
-"ruby
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'tpope/vim-rails'
-
-"rust
-Plugin 'rust-lang/rust.vim'
-
-"golang
-Plugin 'fatih/vim-go'
-
-"Formatting
-Plugin 'tpope/vim-sleuth'
-
-"Front End
-Plugin 'pangloss/vim-javascript'
-Plugin 'ap/vim-css-color'
-
-" Pending Removal
-"Plugin 'vim-scripts/Align'
-"Plugin 'ConradIrwin/vim-bracketed-paste'
-
-Plugin 'patricktulskie/monokai-mod.vim'
-
-call vundle#end()            " required
+call plug#end()
 " }}}
 
 " Airline {{{
@@ -93,7 +75,6 @@ autocmd WinEnter * call NERDTreeQuit()
 " General {{{
 
 set nocompatible
-filetype off
 set foldmethod=marker
 set linebreak
 
