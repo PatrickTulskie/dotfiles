@@ -120,8 +120,16 @@ fi
 
 if command -v vim >/dev/null 2>&1; then
   echo "  [plugins] vim +PlugInstall"
-  vim -es -u "$HOME/.vimrc" -c PlugInstall -c qall >/dev/null 2>&1 </dev/null || \
-    echo "  [warn]   PlugInstall did not complete cleanly — run ':PlugInstall' in vim"
+  vim -es -u "$HOME/.vimrc" -c PlugInstall -c qall >/dev/null 2>&1 </dev/null || true
+  # vim's exit code is unreliable here (a first run errors on the colorscheme
+  # before the plugin exists), so judge by what actually landed on disk.
+  want="$(grep -c "^Plug '" "$REPO_DIR/config/vim/vimrc")"
+  have="$(ls "$HOME/.vim/plugged" 2>/dev/null | wc -l | tr -d ' ')"
+  if [[ "$have" -ge "$want" ]]; then
+    echo "  [ok]     $have plugins installed"
+  else
+    echo "  [warn]   only $have of $want plugins installed — run ':PlugInstall' in vim"
+  fi
 else
   echo "  [skip]   vim not installed — skipping plugin install"
 fi

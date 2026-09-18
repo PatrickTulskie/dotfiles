@@ -17,6 +17,11 @@ everything into place (backing up anything real it would clobber), installs
 oh-my-zsh, vim-plug and the Meslo Nerd Font if they're missing, and seeds
 Rectangle's prefs on a machine that has none yet.
 
+A machine that was on the old layout (`resources/_zshrc`, `_universal_*`,
+Vundle, thefuck) should run `script/migrate` once instead. It clears out what
+the installer doesn't know about, swaps thefuck for pay-respects, then runs
+`script/install`. Anything local it won't delete on its own, it prints.
+
 ## Layout
 
     zsh/zshrc         symlinked to ~/.zshrc

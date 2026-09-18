@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# One-shot migration for a machine that was on the old layout (resources/_zshrc,
+# _universal_* files, Vundle, thefuck). Cleans up what script/install doesn't
+# know about, then runs script/install. Safe to re-run.
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+echo "==> Migrating $HOME to the current dotfiles layout"
+echo ""
+
+# ── Dangling links from the old layout ────────────────────────────────────────
+
+echo "==> Old symlinks"
+for target in "$HOME/.profile" "$HOME/.oh-my-zsh/custom/themes/jived_server.zsh-theme"; do
+  if [[ -L "$target" && "$(readlink "$target")" == "$REPO_DIR"/* ]]; then
+    rm "$target"
+    echo "  [rm]     $target"
+  else
+    echo "  [ok]     $target"
+  fi
+done
+echo ""
+
+# ── git: ~/.gitignore and a real ~/.gitconfig ─────────────────────────────────
+#
+# Both move into the repo. Anything local that the repo doesn't already have is
+# printed so it can be carried over by hand, and the local file is left alone.
+
+echo "==> git"
+if [[ -f "$HOME/.gitignore" && ! -L "$HOME/.gitignore" ]]; then
+  extra="$(grep -vxF -f "$REPO_DIR/config/git/ignore" "$HOME/.gitignore" | grep -v '^\s*$' || true)"
+  if [[ -z "$extra" ]]; then
+    rm "$HOME/.gitignore"
+    echo "  [rm]     $HOME/.gitignore (fully covered by config/git/ignore)"
+  else
+    echo "  [keep]   $HOME/.gitignore has entries not in config/git/ignore:"
+    echo "$extra" | sed 's/^/             /'
+  fi
+else
+  echo "  [ok]     $HOME/.gitignore"
+fi
+
+GITCONFIG_EXTRA=""
+if [[ -f "$HOME/.gitconfig" && ! -L "$HOME/.gitconfig" ]]; then
+  GITCONFIG_EXTRA="$(comm -23 \
+    <(git config --file "$HOME/.gitconfig" --list | grep -v '^core.excludesfile=' | sort) \
+    <(git config --file "$REPO_DIR/config/git/config" --list | sort))"
+fi
+echo ""
+
+# ── Shell leftovers ───────────────────────────────────────────────────────────
+
+echo "==> Shell"
+if [[ -f "$HOME/.zprofile" ]]; then
+  # Only auto-delete when every line is one of the known PATH duplicates.
+  if grep -vE '^\s*(#|$)|\.docker/bin|brew shellenv|\.local/bin' "$HOME/.zprofile" >/dev/null; then
+    echo "  [keep]   $HOME/.zprofile has lines beyond the usual PATH duplicates; review it:"
+    sed 's/^/             /' "$HOME/.zprofile"
+  else
+    rm "$HOME/.zprofile"
+    echo "  [rm]     $HOME/.zprofile (only duplicated PATH setup)"
+  fi
+else
+  echo "  [ok]     no ~/.zprofile"
+fi
+
+if [[ -d "$HOME/.vim/bundle" ]]; then
+  rm -rf "$HOME/.vim/bundle"
+  echo "  [rm]     $HOME/.vim/bundle (Vundle)"
+else
+  echo "  [ok]     no Vundle dir"
+fi
+echo ""
+
+# ── thefuck -> pay-respects ───────────────────────────────────────────────────
+
+echo "==> pay-respects"
+if command -v brew >/dev/null 2>&1; then
+  if brew list --formula thefuck >/dev/null 2>&1; then
+    brew uninstall --quiet thefuck
+    echo "  [rm]     thefuck"
+  fi
+  if command -v pay-respects >/dev/null 2>&1; then
+    echo "  [ok]     pay-respects"
+  else
+    echo "  [install] pay-respects"
+    brew install --quiet timescam/homebrew-tap/pay-respects
+  fi
+elif command -v pay-respects >/dev/null 2>&1; then
+  echo "  [ok]     pay-respects"
+else
+  echo "  [skip]   no Homebrew; install with: cargo install pay-respects"
+fi
+echo ""
+
+# ── Hand off to the regular installer ─────────────────────────────────────────
+
+"$REPO_DIR/script/install"
+
+# The installer backs up a real ~/.gitconfig before linking. Drop that backup
+# when it held nothing the repo doesn't, otherwise say what to carry over.
+if [[ -n "${GITCONFIG_EXTRA}" ]]; then
+  echo "==> Your old ~/.gitconfig had settings not in config/git/config."
+  echo "    They're in the .gitconfig.backup.* file above; carry these over by hand:"
+  echo "$GITCONFIG_EXTRA" | sed 's/^/      /'
+else
+  for backup in "$HOME"/.gitconfig.backup.*; do
+    [[ -e "$backup" ]] || continue
+    rm "$backup"
+    echo "==> Removed $backup (nothing in it the repo lacks)"
+  done
+fi
