@@ -1,0 +1,14 @@
+*.DS_Store
+mkmf.log
+.rake_tasks~
+.cap_tasks~
+.rvmrc
+.tm_properties
+.ruby-gemset
+.ruby-version
+.envrc
+.rspec_status
+*.gem
+.byebug_history
+.claude/
+**/.claude/settings.local.json

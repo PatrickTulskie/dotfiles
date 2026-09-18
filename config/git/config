@@ -1,0 +1,12 @@
+[user]
+	name = Patrick Tulskie
+	email = patricktulskie@gmail.com
+[commit]
+	gpgsign = true
+[init]
+	defaultBranch = main
+
+# >>> guise >>>
+[include]
+	path = ~/.config/guise/gitconfig
+# <<< guise <<<

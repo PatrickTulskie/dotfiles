@@ -56,6 +56,16 @@ echo "==> Shell config"
 link "$REPO_DIR/zsh/zshrc" "$HOME/.zshrc"
 echo ""
 
+# ── git ───────────────────────────────────────────────────────────────────────
+#
+# ~/.config/git/ignore is git's default global excludes path, so no
+# core.excludesfile is needed.
+
+echo "==> git"
+link "$REPO_DIR/config/git/config" "$HOME/.gitconfig"
+link "$REPO_DIR/config/git/ignore" "$HOME/.config/git/ignore"
+echo ""
+
 # ── oh-my-zsh ─────────────────────────────────────────────────────────────────
 #
 # Installs to the default ~/.oh-my-zsh, matching ZSH=$HOME/.oh-my-zsh in zsh/zshrc.
