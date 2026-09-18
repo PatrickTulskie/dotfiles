@@ -50,16 +50,15 @@ link() {
   echo "  [linked] $target -> $src"
 }
 
-# ── Shell config: .zshrc / .profile ───────────────────────────────────────────
+# ── Shell config ──────────────────────────────────────────────────────────────
 
 echo "==> Shell config"
-link "$REPO_DIR/resources/_zshrc"   "$HOME/.zshrc"
-link "$REPO_DIR/resources/_profile" "$HOME/.profile"
+link "$REPO_DIR/zsh/zshrc" "$HOME/.zshrc"
 echo ""
 
 # ── oh-my-zsh ─────────────────────────────────────────────────────────────────
 #
-# Installs to the default ~/.oh-my-zsh, matching ZSH=$HOME/.oh-my-zsh in _zshrc.
+# Installs to the default ~/.oh-my-zsh, matching ZSH=$HOME/.oh-my-zsh in zsh/zshrc.
 # KEEP_ZSHRC=yes leaves our symlinked .zshrc untouched.
 
 echo "==> oh-my-zsh"

@@ -1,0 +1,29 @@
+# zmodload zsh/zprof  # uncomment here and `zprof` at the bottom to profile startup
+
+# PATH has to be settled before oh-my-zsh sources its plugins: the mise plugin
+# returns early and silently when `mise` isn't found.
+source ~/dotfiles/zsh/path.zsh
+
+export ZSH=$HOME/.oh-my-zsh
+ZSH_THEME="jived"
+zstyle ':omz:update' mode disabled
+plugins=(macos mise direnv)
+source $ZSH/oh-my-zsh.sh
+
+source ~/dotfiles/zsh/env.zsh
+source ~/dotfiles/zsh/aliases.zsh
+source ~/dotfiles/zsh/linux.zsh
+
+for f in ~/dotfiles/private/_*(N); do
+  source $f
+done
+
+# Atuin owns ctrl+r. Up-arrow deliberately stays on zsh's own history, so
+# --disable-up-arrow is load-bearing here, not decoration.
+command -v atuin >/dev/null && eval "$(atuin init zsh --disable-up-arrow)"
+
+# >>> guise >>>
+[ -f "$HOME/.config/guise/hook.sh" ] && . "$HOME/.config/guise/hook.sh"
+# <<< guise <<<
+
+# zprof
