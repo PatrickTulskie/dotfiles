@@ -1,3 +1,7 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:$HOME/.docker/bin"
+# End of Docker Desktop section.
+
 ##
 # DELUXE-USR-LOCAL-BIN-INSERT
 # (do not remove this comment)
@@ -13,8 +17,3 @@ if [ $? -eq 1 ] ; then
     PATH=/usr/local/sbin:$PATH
     export PATH
 fi
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

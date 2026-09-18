@@ -40,3 +40,9 @@ done
 command -v atuin >/dev/null && eval "$(atuin init zsh --disable-up-arrow)"
 
 # zprof # bottom of .zshrc # Uncomment me if you wanna do some profiling
+
+# >>> guise >>>
+[ -f "$HOME/.config/guise/hook.sh" ] && . "$HOME/.config/guise/hook.sh"
+# <<< guise <<<
+
+export PATH="$HOME/agents/bin:$PATH"
