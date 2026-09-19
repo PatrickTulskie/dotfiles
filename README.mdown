@@ -2,7 +2,7 @@
 
 These are my dotfiles.  There are many like them, but these are mine.
 
-They are mostly for ZSH and Mac, but I use them on Linux too.  I use oh-my-zsh (https://github.com/ohmyzsh/ohmyzsh).
+They are mostly for ZSH and Mac, but I use them on Linux too.  No framework, just zsh and a [starship](https://starship.rs) prompt.
 
 ## Installation and Usage
 
@@ -14,7 +14,7 @@ Clone this repo to `~/dotfiles` (the shell configs expect it there), then run
 
 `script/install` is idempotent and safe to re-run on any machine. It symlinks
 everything into place (backing up anything real it would clobber), installs
-oh-my-zsh, vim-plug and the Meslo Nerd Font if they're missing, and seeds
+vim-plug and the Meslo Nerd Font if they're missing, and seeds
 Rectangle's prefs on a machine that has none yet.
 
 `~/.zshrc` and `~/.gitconfig` are the two files other tools like to edit in
@@ -37,6 +37,7 @@ the installer doesn't know about, swaps thefuck for pay-respects, then runs
 
     zsh/zshrc         symlinked to ~/.zshrc
     zsh/path.zsh      the only place PATH is assembled
+    zsh/shell.zsh     history, completion, key bindings
     zsh/env.zsh       exports
     zsh/aliases.zsh   aliases
     zsh/linux.zsh     Linux-only bits
@@ -45,8 +46,8 @@ the installer doesn't know about, swaps thefuck for pay-respects, then runs
     config/           app configs symlinked into ~/.config (git, ghostty, ...)
     private/_*        gitignored; anything matching is sourced after the rest
 
-If you'd rather not run the installer, source `zsh/path.zsh` before oh-my-zsh
-and the other `zsh/*.zsh` files after it, as `zsh/zshrc` does.
+If you'd rather not run the installer, source `zsh/path.zsh` first and the
+other `zsh/*.zsh` files after it, as `zsh/zshrc` does.
 
 ## Notes
 
@@ -72,7 +73,13 @@ Homebrew and also guarded, so it's simply absent where it isn't installed.
 
 [mise](https://mise.jdx.dev), [direnv](https://direnv.net) and
 [zoxide](https://github.com/ajeetdsouza/zoxide) (`z`, `zi`) are hooked in the
-same way, straight from the binaries rather than through oh-my-zsh plugins.
+same way, straight from the binaries.
+
+The prompt is starship, pointed straight at `config/starship/` by
+`STARSHIP_CONFIG`. `soda.toml` (the default) is the Pastel Powerline preset in
+the Monokai Soda palette; `jived.toml` is the old oh-my-zsh theme. Set
+`STARSHIP_THEME=jived` (a `private/_*` file works) to switch. Without starship
+installed there's a plain fallback prompt.
 
 fzf is deliberately *not* wired into the shell. It's installed for vim's
 `<C-P>` (`:FZF`), which only needs the binary on PATH, and atuin owns ctrl+r.

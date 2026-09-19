@@ -2,11 +2,7 @@
 
 source ~/dotfiles/zsh/path.zsh
 
-export ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="jived"
-zstyle ':omz:update' mode disabled
-source $ZSH/oh-my-zsh.sh
-
+source ~/dotfiles/zsh/shell.zsh
 source ~/dotfiles/zsh/env.zsh
 source ~/dotfiles/zsh/aliases.zsh
 source ~/dotfiles/zsh/linux.zsh
@@ -24,6 +20,13 @@ command -v pay-respects >/dev/null && eval "$(pay-respects zsh --alias fuck)"
 command -v mise >/dev/null && eval "$(mise activate zsh)"
 command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+
+export STARSHIP_CONFIG=~/dotfiles/config/starship/${STARSHIP_THEME:-soda}.toml
+if command -v starship >/dev/null; then
+  eval "$(starship init zsh)"
+else
+  PROMPT='%B%F{green}%m:%F{blue}%1~%f%b '
+fi
 
 # >>> guise >>>
 [ -f "$HOME/.config/guise/hook.sh" ] && . "$HOME/.config/guise/hook.sh"

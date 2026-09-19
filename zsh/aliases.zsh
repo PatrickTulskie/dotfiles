@@ -4,3 +4,5 @@ alias gitco='git checkout'
 alias gitd='git diff'
 
 alias FUCK=fuck
+
+alias grep='grep --color=auto'

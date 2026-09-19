@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Dotfiles installer — safe to re-run on any machine.
 # Symlinks configs into place, backs up anything real it would clobber, and
-# fills in the blanks (oh-my-zsh, vim plugins, fonts) only when missing.
+# fills in the blanks (vim plugins, fonts) only when missing.
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OS="$(uname -s)"
@@ -142,27 +142,6 @@ managed "$REPO_DIR/zsh/zshrc" "$HOME/.zshrc" "source \"$REPO_DIR/zsh/zshrc\""
 section "git"
 managed "$REPO_DIR/config/git/config" "$HOME/.gitconfig" "$(printf '[include]\n\tpath = %s/config/git/config' "$REPO_DIR")"
 link "$REPO_DIR/config/git/ignore" "$HOME/.config/git/ignore"
-
-# ── oh-my-zsh ─────────────────────────────────────────────────────────────────
-#
-# Installs to the default ~/.oh-my-zsh, matching ZSH=$HOME/.oh-my-zsh in
-# zsh/zshrc. KEEP_ZSHRC=yes leaves our .zshrc untouched.
-
-section "oh-my-zsh"
-export ZSH="$HOME/.oh-my-zsh"
-if [[ -d "$ZSH" ]]; then
-  ui_note "✓ installed at $(ui_path "$ZSH")"
-else
-  ui_bar "${UI_CYAN}↓${UI_OFF} installing to $(ui_path "$ZSH")"
-  RUNZSH=no KEEP_ZSHRC=yes CHSH=no \
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended >/dev/null
-fi
-
-mkdir -p "$ZSH/custom/themes"
-for theme in "$REPO_DIR"/resources/themes/zsh/*.zsh-theme; do
-  [[ -e "$theme" ]] || continue
-  link "$theme" "$ZSH/custom/themes/$(basename "$theme")"
-done
 
 # ── vim ───────────────────────────────────────────────────────────────────────
 #

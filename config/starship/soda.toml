@@ -1,0 +1,103 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# The Pastel Powerline preset, recolored with Ghostty's Monokai Soda palette.
+
+palette = "monokai_soda"
+
+format = """
+[](purple)\
+$os\
+$username\
+$hostname\
+[](fg:purple bg:pink)\
+$directory\
+($git_branch$git_status[](fg:orange))\
+$line_break\
+$character"""
+
+right_format = "([](fg:cyan)$ruby$golang$rust$python$nodejs[](fg:cyan))"
+
+[palettes.monokai_soda]
+ink = "#1a1a1a"
+white = "#f6f6ef"
+pink = "#f4005f"
+orange = "#fa8419"
+yellow = "#e0d561"
+purple = "#9d65ff"
+cyan = "#58d1eb"
+
+[os]
+disabled = false
+style = "bg:purple fg:white"
+format = "[ $symbol ]($style)"
+
+[os.symbols]
+Macos = "\uf179"
+Ubuntu = "\uf31b"
+Debian = "\uf306"
+Linux = "\uf31a"
+
+[username]
+style_user = "bg:purple fg:white"
+style_root = "bg:purple fg:white bold"
+format = "[$user]($style)"
+
+[hostname]
+style = "bg:purple fg:white"
+format = "[@$hostname ]($style)"
+
+[directory]
+style = "bg:pink fg:white"
+before_repo_root_style = "bg:pink fg:white"
+repo_root_style = "bg:pink fg:white"
+format = "[ $path]($style)[$read_only]($read_only_style)[ ]($style)[](fg:pink)"
+repo_root_format = "[ $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style)[ ]($style)[](fg:pink bg:orange)"
+read_only = " \U000f033e"
+read_only_style = "bg:pink fg:white"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "\U000f0219 "
+"Downloads" = "\uf019 "
+"Music" = "\uf001 "
+"Pictures" = "\uf03e "
+
+[git_branch]
+symbol = "\uf418"
+style = "bg:orange fg:ink"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "bg:orange fg:ink"
+format = "[$all_status$ahead_behind ]($style)"
+
+[ruby]
+symbol = "\ue791"
+style = "bg:cyan fg:ink"
+format = "[ $symbol ($version) ]($style)"
+
+[golang]
+symbol = "\ue627"
+style = "bg:cyan fg:ink"
+format = "[ $symbol ($version) ]($style)"
+
+[rust]
+symbol = "\ue7a8"
+style = "bg:cyan fg:ink"
+format = "[ $symbol ($version) ]($style)"
+
+[python]
+symbol = "\ue73c"
+style = "bg:cyan fg:ink"
+format = "[ $symbol ($version) ]($style)"
+
+[nodejs]
+symbol = "\ue718"
+style = "bg:cyan fg:ink"
+format = "[ $symbol ($version) ]($style)"
+
+[character]
+success_symbol = "[\u276f](bold pink)"
+error_symbol = "[\u276f](bold yellow)"
+vimcmd_symbol = "[\u276e](bold pink)"

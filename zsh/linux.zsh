@@ -1,5 +1,7 @@
 [[ $OSTYPE == linux* ]] || return 0
 
+alias ls='ls --color=auto'
+
 function ghost_mode() {
   sudo service mariadb stop
   sudo service avahi-daemon stop
