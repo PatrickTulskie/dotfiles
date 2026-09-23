@@ -5,6 +5,8 @@
 	gpgsign = true
 [init]
 	defaultBranch = main
+[core]
+	untrackedCache = true
 
 # >>> guise >>>
 [include]
