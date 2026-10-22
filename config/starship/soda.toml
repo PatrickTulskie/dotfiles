@@ -2,6 +2,7 @@
 
 # The Pastel Powerline preset, recolored with Ghostty's Monokai Soda palette.
 
+command_timeout = 1000
 palette = "monokai_soda"
 
 format = """
